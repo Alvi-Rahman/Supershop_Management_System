@@ -28,10 +28,9 @@ def signup(request):
             form.save()
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
-            return JsonResponse(json.dumps([username, raw_password], default=str), safe=False)
-            # user = authenticate(username=username, password=raw_password)
-            # login(request, user)
-            # return redirect('home')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('home')
     else:
         form = UserRegistrationForm()
     return render(request, 'signup.html', {'form': form})

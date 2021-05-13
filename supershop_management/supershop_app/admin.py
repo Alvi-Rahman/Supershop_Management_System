@@ -1,5 +1,7 @@
 from django.contrib import admin
 from .models import User, Product, Order
+
+
 # Register your models here.
 
 
@@ -8,10 +10,6 @@ class UserAdmin(admin.ModelAdmin):
     list_display = [
         "username",
         "password",
-        "email"
-    ]
-    list_filter = [
-        "username",
         "email"
     ]
 
@@ -26,14 +24,18 @@ class ProductAdmin(admin.ModelAdmin):
         "current_stock"
     ]
     list_filter = [
-        "product_name"
+        "product_category"
     ]
 
 
 class OrderAdmin(admin.ModelAdmin):
-    model = Product
+    model = Order
     list_display = [
         "order_id",
-        "purchased_products",
         "purchase_by"
     ]
+
+
+admin.site.register(User, UserAdmin)
+admin.site.register(Product, ProductAdmin)
+admin.site.register(Order, OrderAdmin)

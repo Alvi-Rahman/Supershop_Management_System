@@ -1,11 +1,12 @@
+from django.contrib import messages
 from django.shortcuts import render
 # from django.views import View
 # from django.views.generic import (TemplateView, ListView)
 # from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import UserCreationForm
-from .forms import UserRegistrationForm
+from django.contrib.auth import login, authenticate, logout
+from .forms import UserRegistrationForm, UserLoginForm
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 import json
 
@@ -19,6 +20,10 @@ import json
 #
 #     def post(self, request):
 #         return render(request, self.template_name)
+
+@login_required(login_url='/login/')
+def home(request):
+    return render(request, 'home_page.html')
 
 
 def signup(request):
@@ -34,3 +39,27 @@ def signup(request):
     else:
         form = UserRegistrationForm()
     return render(request, 'signup.html', {'form': form})
+
+
+def login_view(request):
+    if request.method == "POST":
+        form = UserLoginForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.info(request, f"You are now logged in as {username}.")
+                return redirect("home")
+            else:
+                messages.error(request, "Invalid username or password.")
+        else:
+            messages.error(request, "Invalid username or password.")
+    form = UserLoginForm()
+    return render(request, "login.html", context={"login_form": form})
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')

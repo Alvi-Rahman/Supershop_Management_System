@@ -16,11 +16,17 @@ class User(AbstractUser):
         return self.username
 
 
+class ProductCategory(models.Model):
+    id = models.AutoField(primary_key=True)
+    category_code = models.UUIDField(default=uuid.uuid4)
+    category_name = models.CharField(max_length=255, blank=False, null=False)
+
+
 class Product(models.Model):
     id = models.AutoField(primary_key=True)
     product_code = models.UUIDField(default=uuid.uuid4)
     product_name = models.CharField(max_length=255, blank=False, null=False)
-    product_category = models.CharField(max_length=100, blank=False, null=False)
+    product_category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
     product_unit_price = models.FloatField(default=0.0)
     current_stock = models.IntegerField(default=0)
 

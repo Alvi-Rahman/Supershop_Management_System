@@ -171,8 +171,11 @@ def admin_category_operation(request, ops):
                               'logout': request.user.is_authenticated,
                               "admin_category": "active"
                           })
-        if ops == 'edit':
-            form = CategoryEditForm()
+        elif 'edit' in ops:
+            cat_id = ops.split('__')[-1]
+            cat = models.ProductCategory.objects.filter(pk=cat_id).first()
+            form = CategoryEditForm(initial={"category_name": cat.category_name,
+                                             "category_code": cat.category_code})
             return render(request, "all_forms.html",
                           context={"form": form,
                                    "title": "Edit Category",

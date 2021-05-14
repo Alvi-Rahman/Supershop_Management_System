@@ -21,7 +21,7 @@
                     <th scope="row">{{ forloop.counter }}</th>
                     <td>{{ category.category_name }}</td>
                     <td>{{ category.category_code }}</td>
-                    <td><a href=""><i class="fas fa-edit"></i></a></td>
+                    <td><a href="/supershop_admin/category/edit__{{ category.pk }}/"><i class="fas fa-edit"></i></a></td>
                     <td><a href=""><i class="fas fa-trash-alt"></i></a></td>
                 </tr>
             {% endfor %}

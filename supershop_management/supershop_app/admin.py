@@ -9,8 +9,8 @@ class UserAdmin(admin.ModelAdmin):
     model = User
     list_display = [
         "username",
-        "password",
-        "email"
+        "email",
+        "is_superuser"
     ]
 
 

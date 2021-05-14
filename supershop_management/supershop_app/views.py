@@ -1,8 +1,4 @@
 from django.contrib import messages
-from django.shortcuts import render
-# from django.views import View
-# from django.views.generic import (TemplateView, ListView)
-# from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login, authenticate, logout
 from .forms import UserRegistrationForm, UserLoginForm
 from django.shortcuts import render, redirect
@@ -23,7 +19,16 @@ import json
 
 @login_required(login_url='/login/')
 def home(request):
-    return render(request, 'home_page.html')
+
+    return render(request, 'home_page.html', {'logout': request.user.is_authenticated})
+
+
+@login_required(login_url='/login/')
+def admin_home(request):
+
+    return render(request, 'admin_home.html',
+                  {'logout': request.user.is_authenticated,
+                   "admin": 1})
 
 
 def signup(request):
@@ -36,9 +41,12 @@ def signup(request):
             user = authenticate(username=username, password=raw_password)
             login(request, user)
             return redirect('home')
-    else:
-        form = UserRegistrationForm()
-    return render(request, 'signup.html', {'form': form})
+    elif request.method == 'GET':
+        if request.user.is_authenticated:
+            return redirect('home')
+        else:
+            form = UserRegistrationForm()
+            return render(request, 'signup.html', {'form': form})
 
 
 def login_view(request):
@@ -56,10 +64,47 @@ def login_view(request):
                 messages.error(request, "Invalid username or password.")
         else:
             messages.error(request, "Invalid username or password.")
-    form = UserLoginForm()
-    return render(request, "login.html", context={"login_form": form})
+    elif request.method == 'GET':
+        if request.user.is_authenticated:
+            return redirect('home')
+        else:
+            form = UserLoginForm()
+            return render(request, "login.html", context={"login_form": form})
 
 
 def logout_view(request):
     logout(request)
     return redirect('login')
+
+
+def admin_logout_view(request):
+    logout(request)
+    return redirect('supershop_admin')
+
+
+def supershop_admin(request):
+    if request.method == "POST":
+        form = UserLoginForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                if user.is_superuser:
+                    login(request, user)
+                    return redirect("admin_home")
+                else:
+                    messages.error(request, "You are not a superuser")
+                    return redirect("supershop_admin")
+            else:
+                messages.error(request, "Invalid username or password.")
+        else:
+            messages.error(request, "Invalid username or password.")
+    elif request.method == 'GET':
+        if request.user.is_authenticated:
+            return redirect('home')
+        else:
+            form = UserLoginForm()
+            return render(request, "login.html", context={"login_form": form})
+
+

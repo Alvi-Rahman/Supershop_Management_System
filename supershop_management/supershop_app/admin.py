@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Product, Order
+from .models import User, Product, Order, ProductCategory
 
 
 # Register your models here.
@@ -28,6 +28,14 @@ class ProductAdmin(admin.ModelAdmin):
     ]
 
 
+class ProductCategoryAdmin(admin.ModelAdmin):
+    model = ProductCategory
+    list_display = [
+        "category_code",
+        "category_name",
+    ]
+
+
 class OrderAdmin(admin.ModelAdmin):
     model = Order
     list_display = [
@@ -39,3 +47,4 @@ class OrderAdmin(admin.ModelAdmin):
 admin.site.register(User, UserAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Order, OrderAdmin)
+admin.site.register(ProductCategory, ProductCategoryAdmin)

@@ -133,10 +133,10 @@ def admin_category(request):
 
 def admin_product(request):
     if request.method == 'GET':
-        return render(request, "category.html",
-                      context={"title": "Category",
+        return render(request, "product.html",
+                      context={"title": "Product",
                                "admin": 1,
-                               "admin_category": "active"
+                               "admin_product": "active"
                                })
 
 def admin_category_operation(request, ops):

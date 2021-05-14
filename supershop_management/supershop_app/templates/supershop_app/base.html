@@ -74,11 +74,11 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     {% if admin %}
-                        <li class="nav-item active">
+                        <li class="nav-item {{ admin_home }}">
                             <a class="nav-link" href="/admin_home/">Home <span class="sr-only">(current)</span></a>
                         </li>
                     {% else %}
-                        <li class="nav-item {{ active }}">
+                        <li class="nav-item {{ home }}">
                             <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
                         </li>
                     {% endif %}
@@ -92,11 +92,11 @@
                             <a class="nav-link" href="/login/">LogIn</a>
                         </li>
                     {% else %}
-                        <li class="nav-item {{ active }}">
+                        <li class="nav-item {{ admin_category }}">
                             <a class="nav-link" href="/supershop_admin/category/">Category</a>
                         </li>
 
-                        <li class="nav-item {{ active }}">
+                        <li class="nav-item {{ admin_product }}">
                             <a class="nav-link" href="/supershop_admin/product/">Product</a>
                         </li>
                   {% endif %}

@@ -19,15 +19,21 @@ import json
 
 @login_required(login_url='/login/')
 def home(request):
-    return render(request, 'home_page.html', {'logout': request.user.is_authenticated})
+    return render(request, 'home_page.html',
+                  {
+                      'logout': request.user.is_authenticated,
+                      'home': 'active'
+                  })
 
 
 @login_required(login_url='/login/')
 def admin_home(request):
     return render(request, 'admin_home.html',
-                  {'logout': request.user.is_authenticated,
-                   "admin": 1,
-                   "active": "active"})
+                  {
+                      'logout': request.user.is_authenticated,
+                      "admin": 1,
+                      "admin_home": "active"
+                  })
 
 
 def signup(request):
@@ -112,13 +118,26 @@ def supershop_admin(request):
             form = UserLoginForm()
             return render(request, "all_forms.html", context={"form": form,
                                                               "btn_name": "Login",
-                                                              "active": "active"})
+                                                              "title": "Admin Login",
+                                                              "admin_login": "active"})
 
 
 def admin_category(request):
     if request.method == 'GET':
-        return render(request, "category.html")
+        return render(request, "category.html",
+                      context={"title": "Category",
+                               "admin": 1,
+                               "admin_category": "active"
+                               })
 
+
+def admin_product(request):
+    if request.method == 'GET':
+        return render(request, "category.html",
+                      context={"title": "Category",
+                               "admin": 1,
+                               "admin_category": "active"
+                               })
 
 def admin_category_operation(request, ops):
     if request.method == "POST":
@@ -135,12 +154,12 @@ def admin_category_operation(request, ops):
             form = CategoryForm()
             return render(request, "all_forms.html",
                           context={"form": form,
-                                   "title": "Category",
+                                   "title": "Add Category",
                                    "admin": 1,
                                    'logout': request.user.is_authenticated,
                                    "btn_name": "ADD Category",
-                                   "active": "active"})
+                                   "admin_category": "active"})
 
 
-def supershop_admin_product(request):
+def admin_product_operation(request, ops):
     pass

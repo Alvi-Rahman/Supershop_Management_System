@@ -11,5 +11,5 @@ urlpatterns = [
     path('supershop_admin/', views.supershop_admin, name="supershop_admin"),
     path('supershop_admin/category/', views.admin_category, name="admin_category"),
     path('supershop_admin/category/<str:ops>/', views.admin_category_operation, name="admin_category_operation"),
-    path('supershop_admin/product/', views.supershop_admin_product, name="supershop_admin_product"),
+    path('supershop_admin/product/', views.admin_product, name="admin_product"),
 ]

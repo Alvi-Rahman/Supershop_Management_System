@@ -37,3 +37,14 @@ class CategoryForm(forms.ModelForm):
     class Meta:
         model = ProductCategory
         fields = ('category_name',)
+
+
+class CategoryEditForm(forms.ModelForm):
+    category_name = forms.CharField(max_length=255, required=True,
+                                    widget=forms.TextInput(attrs={'class': 'form-control'}))
+    category_code = forms.CharField(max_length=255, required=True,
+                                    widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = ProductCategory
+        fields = ('category_name', 'category_code')

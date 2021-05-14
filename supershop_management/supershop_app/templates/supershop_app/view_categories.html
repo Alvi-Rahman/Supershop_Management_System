@@ -16,13 +16,15 @@
                 </tr>
             </thead>
             <tbody>
+            {% for category in categories %}
                 <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>@mdo</td>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ category.category_name }}</td>
+                    <td>{{ category.category_code }}</td>
+                    <td><a href=""><i class="fas fa-edit"></i></a></td>
+                    <td><a href=""><i class="fas fa-trash-alt"></i></a></td>
                 </tr>
+            {% endfor %}
             </tbody>
         </table>
     </div>

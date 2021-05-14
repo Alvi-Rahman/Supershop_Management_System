@@ -1,9 +1,9 @@
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
-from .forms import UserRegistrationForm, UserLoginForm, CategoryForm
+from .forms import UserRegistrationForm, UserLoginForm, CategoryForm, CategoryEditForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-import models
+from . import models
 from django.http import JsonResponse
 import json
 
@@ -162,7 +162,7 @@ def admin_category_operation(request, ops):
                                    "btn_name": "ADD Category",
                                    "admin_category": "active"})
         if ops == 'view':
-            categories = models.ProductCategory.all()
+            categories = models.ProductCategory.objects.all()
             return render(request, 'view_categories.html',
                           context={
                               "categories": categories,
@@ -171,6 +171,15 @@ def admin_category_operation(request, ops):
                               'logout': request.user.is_authenticated,
                               "admin_category": "active"
                           })
+        if ops == 'edit':
+            form = CategoryEditForm()
+            return render(request, "all_forms.html",
+                          context={"form": form,
+                                   "title": "Edit Category",
+                                   "admin": 1,
+                                   'logout': request.user.is_authenticated,
+                                   "btn_name": "Edit Category",
+                                   "admin_category": "active"})
 
 
 def admin_product_operation(request, ops):

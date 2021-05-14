@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %} {{ title }} | Supershop {% endblock %}
+{% load static %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="m-5 text-center">
+            <div class="row">
+                <div class="col-md-4 my-2">
+                    <a href="/supershop_admin/category/add/" class="text-dark text-decoration-none">
+                        <div class="card shadow" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">Add a Category</h5>
+                                <p> Click to add a Category </p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4 my-2">
+                    <a href="/" class="text-dark text-decoration-none">
+                        <div class="card shadow" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">Edit Category</h5>
+                                <p> Click to edit a Category </p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4 my-2">
+                    <a href="/" class="text-dark text-decoration-none">
+                        <div class="card shadow" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">Delete Category</h5>
+                                <p> Click to delete a Category </p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

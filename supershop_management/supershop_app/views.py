@@ -26,7 +26,8 @@ def home(request):
 def admin_home(request):
     return render(request, 'admin_home.html',
                   {'logout': request.user.is_authenticated,
-                   "admin": 1})
+                   "admin": 1,
+                   "active": "active"})
 
 
 def signup(request):
@@ -46,7 +47,8 @@ def signup(request):
             form = UserRegistrationForm()
             return render(request, 'all_forms.html', {'form': form,
                                                       "btn_name": "SignUp",
-                                                      "title": "Sign Up"})
+                                                      "title": "Sign Up",
+                                                      "active": "active"})
 
 
 def login_view(request):
@@ -71,7 +73,8 @@ def login_view(request):
             form = UserLoginForm()
             return render(request, "all_forms.html", context={"form": form,
                                                               "btn_name": "Login",
-                                                              "title": "Login"})
+                                                              "title": "Login",
+                                                              "active": "active"})
 
 
 def logout_view(request):
@@ -108,26 +111,34 @@ def supershop_admin(request):
         else:
             form = UserLoginForm()
             return render(request, "all_forms.html", context={"form": form,
-                                                              "btn_name": "Login"})
+                                                              "btn_name": "Login",
+                                                              "active": "active"})
 
 
-def supershop_admin_category(request):
+def admin_category(request):
+    if request.method == 'GET':
+        return render(request, "category.html")
+
+
+def admin_category_operation(request, ops):
     if request.method == "POST":
         form = CategoryForm(request, data=request.POST)
         if form.is_valid():
             form.save()
-            return redirect("supershop_admin_category")
+            return redirect("admin_category")
         else:
             messages.error(request, "Something Went Wrong.")
-            return redirect("supershop_admin_category")
+            return redirect("admin_category")
     elif request.method == 'GET':
-        form = CategoryForm()
-        return render(request, "all_forms.html",
-                      context={"form": form,
-                               "title": "Category",
-                               "admin": 1,
-                               'logout': request.user.is_authenticated,
-                               "btn_name": "ADD Category"})
+        if ops == 'add':
+            form = CategoryForm()
+            return render(request, "all_forms.html",
+                          context={"form": form,
+                                   "title": "Category",
+                                   "admin": 1,
+                                   'logout': request.user.is_authenticated,
+                                   "btn_name": "ADD Category",
+                                   "active": "active"})
 
 
 def supershop_admin_product(request):

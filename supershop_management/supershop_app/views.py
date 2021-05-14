@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
-from .forms import UserRegistrationForm, UserLoginForm
+from .forms import UserRegistrationForm, UserLoginForm, CategoryForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -19,13 +19,11 @@ import json
 
 @login_required(login_url='/login/')
 def home(request):
-
     return render(request, 'home_page.html', {'logout': request.user.is_authenticated})
 
 
 @login_required(login_url='/login/')
 def admin_home(request):
-
     return render(request, 'admin_home.html',
                   {'logout': request.user.is_authenticated,
                    "admin": 1})
@@ -46,7 +44,9 @@ def signup(request):
             return redirect('home')
         else:
             form = UserRegistrationForm()
-            return render(request, 'signup.html', {'form': form})
+            return render(request, 'all_forms.html', {'form': form,
+                                                      "btn_name": "SignUp",
+                                                      "title": "Sign Up"})
 
 
 def login_view(request):
@@ -69,7 +69,9 @@ def login_view(request):
             return redirect('home')
         else:
             form = UserLoginForm()
-            return render(request, "login.html", context={"login_form": form})
+            return render(request, "all_forms.html", context={"form": form,
+                                                              "btn_name": "Login",
+                                                              "title": "Login"})
 
 
 def logout_view(request):
@@ -105,11 +107,27 @@ def supershop_admin(request):
             return redirect('home')
         else:
             form = UserLoginForm()
-            return render(request, "login.html", context={"login_form": form})
+            return render(request, "all_forms.html", context={"form": form,
+                                                              "btn_name": "Login"})
 
 
 def supershop_admin_category(request):
-    pass
+    if request.method == "POST":
+        form = CategoryForm(request, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("supershop_admin_category")
+        else:
+            messages.error(request, "Something Went Wrong.")
+            return redirect("supershop_admin_category")
+    elif request.method == 'GET':
+        form = CategoryForm()
+        return render(request, "all_forms.html",
+                      context={"form": form,
+                               "title": "Category",
+                               "admin": 1,
+                               'logout': request.user.is_authenticated,
+                               "btn_name": "ADD Category"})
 
 
 def supershop_admin_product(request):

@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %} Login | Supershop {% endblock %}
+{% block title %} {{ title }} | Supershop {% endblock %}
 {% load static %}
 
 {% block content %}
@@ -8,11 +8,11 @@
       <form method="post">
           <div class="justify-center">
             {% csrf_token %}
-            {{ login_form.as_p }}
+            {{ form.as_p }}
           </div>
 
           <div class="text-center">
-              <button class="btn btn-primary">Login</button>
+              <button class="btn btn-primary">{{ btn_name }}</button>
           </div>
       </form>
     </div>

@@ -122,13 +122,14 @@ def admin_category(request):
 
 def admin_category_operation(request, ops):
     if request.method == "POST":
-        form = CategoryForm(request, data=request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("admin_category")
-        else:
-            messages.error(request, "Something Went Wrong.")
-            return redirect("admin_category")
+        if ops == 'add':
+            form = CategoryForm(request.POST)
+            if form.is_valid():
+                messages.success(request, "Succesfully added.")
+                form.save()
+            else:
+                messages.error(request, "Something Went Wrong.")
+            return redirect("/supershop_admin/category/add/")
     elif request.method == 'GET':
         if ops == 'add':
             form = CategoryForm()

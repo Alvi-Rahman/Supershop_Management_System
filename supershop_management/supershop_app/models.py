@@ -19,7 +19,7 @@ class User(AbstractUser):
 class ProductCategory(models.Model):
     id = models.AutoField(primary_key=True)
     category_code = models.UUIDField(default=uuid.uuid4)
-    category_name = models.CharField(max_length=255, blank=False, null=False)
+    category_name = models.CharField(max_length=255, blank=False, null=False, unique=True)
 
     def __str__(self):
         return self.category_name

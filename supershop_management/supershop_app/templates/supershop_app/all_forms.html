@@ -3,18 +3,30 @@
 {% load static %}
 
 {% block content %}
-  <div class="container">
-    <div class="jumbotron m-5">
-      <form method="post">
-          <div class="justify-center">
-            {% csrf_token %}
-            {{ form.as_p }}
-          </div>
 
-          <div class="text-center">
-              <button class="btn btn-primary">{{ btn_name }}</button>
-          </div>
-      </form>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+
+    <div class="container">
+        <div class="jumbotron m-5">
+            <form method="post">
+                <div class="justify-center">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                </div>
+
+                <div class="text-center">
+                    <button class="btn btn-primary">{{ btn_name }}</button>
+                </div>
+            </form>
+        </div>
+
     </div>
-  </div>
+
 {% endblock %}

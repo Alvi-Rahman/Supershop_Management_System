@@ -108,3 +108,9 @@ def supershop_admin(request):
             return render(request, "login.html", context={"login_form": form})
 
 
+def supershop_admin_category(request):
+    pass
+
+
+def supershop_admin_product(request):
+    pass

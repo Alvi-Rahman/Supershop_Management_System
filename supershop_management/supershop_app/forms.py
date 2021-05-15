@@ -63,3 +63,20 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = ('product_name', 'product_category', 'product_unit_price', 'current_stock')
+
+
+class ProductEditForm(forms.ModelForm):
+    product_name = forms.CharField(max_length=255, required=True,
+                                   widget=forms.TextInput(attrs={'class': 'form-control'}))
+    product_code = forms.CharField(max_length=255, required=True,
+                                   widget=forms.TextInput(attrs={'class': 'form-control'}))
+    product_category = forms.ModelChoiceField(queryset=ProductCategory.objects.all(), required=True,
+                                              widget=forms.Select(attrs={'class': 'form-control'}))
+    product_unit_price = forms.CharField(max_length=255, required=True,
+                                         widget=forms.TextInput(attrs={'class': 'form-control'}))
+    current_stock = forms.CharField(max_length=255, required=True,
+                                    widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = ProductCategory
+        fields = ('product_code', 'product_name', 'product_category', 'product_unit_price', 'current_stock')

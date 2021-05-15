@@ -1,7 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from .forms import (UserRegistrationForm, UserLoginForm,
-                    CategoryForm, CategoryEditForm, ProductForm)
+                    CategoryForm, CategoryEditForm, ProductForm,
+                    ProductEditForm)
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from . import models
@@ -251,10 +252,14 @@ def admin_product_operation(request, ops):
                               "admin_product": "active"
                           })
         elif 'edit' in ops:
-            cat_id = ops.split('__')[-1]
-            cat = models.ProductCategory.objects.filter(pk=cat_id).first()
-            form = CategoryEditForm(initial={"category_name": cat.category_name,
-                                             "category_code": cat.category_code})
+            prod_id = ops.split('__')[-1]
+            prod = models.ProductCategory.objects.filter(pk=prod_id).first()
+            form = ProductEditForm(initial={"product_code": prod.product_code,
+                                             "product_name": prod.product_name,
+                                             "product_category": prod.product_category,
+                                             "product_unit_price": prod.product_unit_price,
+                                             "current_stock": prod.current_stock
+                                             })
             return render(request, "all_forms.html",
                           context={"form": form,
                                    "title": "Edit Category",

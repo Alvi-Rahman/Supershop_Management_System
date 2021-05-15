@@ -226,9 +226,9 @@ def admin_product_operation(request, ops):
                 messages.error(request, "Something Went Wrong.")
             return redirect("/supershop_admin/category/view/")
         elif 'delete' in ops:
-            cat_id = ops.split('__')[-1]
+            prod_id = ops.split('__')[-1]
             # return JsonResponse(cat_id, safe=False)
-            cat = models.ProductCategory.objects.filter(pk=cat_id).delete()
+            cat = models.Product.objects.filter(pk=prod_id).delete()
             return JsonResponse(1, safe=False)
 
     elif request.method == 'GET':
@@ -266,6 +266,6 @@ def admin_product_operation(request, ops):
                                    "admin": 1,
                                    'logout': request.user.is_authenticated,
                                    "btn_name": "Edit Category",
-                                   "admin_category": "active"})
+                                   "admin_product": "active"})
         else:
             return redirect("admin_product")

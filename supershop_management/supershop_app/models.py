@@ -28,7 +28,7 @@ class ProductCategory(models.Model):
 class Product(models.Model):
     id = models.AutoField(primary_key=True)
     product_code = models.UUIDField(default=uuid.uuid4)
-    product_name = models.CharField(max_length=255, blank=False, null=False)
+    product_name = models.CharField(max_length=255, blank=False, null=False, unique=True)
     product_category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
     product_unit_price = models.FloatField(default=0.0)
     current_stock = models.IntegerField(default=0)

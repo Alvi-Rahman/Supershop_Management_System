@@ -217,7 +217,7 @@ def admin_product_operation(request, ops):
             return redirect("/supershop_admin/product/add/")
         elif 'edit' in ops:
             cat_id = ops.split('__')[-1]
-            cat = models.ProductCategory.objects.filter(pk=cat_id).first()
+            cat = models.Product.objects.filter(pk=cat_id).first()
             form = ProductEditForm(request.POST, instance=cat)
             if form.is_valid():
                 form.save()
@@ -253,7 +253,7 @@ def admin_product_operation(request, ops):
                           })
         elif 'edit' in ops:
             prod_id = ops.split('__')[-1]
-            prod = models.ProductCategory.objects.filter(pk=prod_id).first()
+            prod = models.Product.objects.filter(pk=prod_id).first()
             form = ProductEditForm(initial={"product_code": prod.product_code,
                                             "product_name": prod.product_name,
                                             "product_category": prod.product_category,

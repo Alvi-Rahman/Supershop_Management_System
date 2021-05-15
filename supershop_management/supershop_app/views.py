@@ -218,7 +218,7 @@ def admin_product_operation(request, ops):
         elif 'edit' in ops:
             cat_id = ops.split('__')[-1]
             cat = models.ProductCategory.objects.filter(pk=cat_id).first()
-            form = CategoryForm(request.POST, instance=cat)
+            form = ProductEditForm(request.POST, instance=cat)
             if form.is_valid():
                 form.save()
                 messages.success(request, "Succesfully Updated.")
@@ -255,11 +255,11 @@ def admin_product_operation(request, ops):
             prod_id = ops.split('__')[-1]
             prod = models.ProductCategory.objects.filter(pk=prod_id).first()
             form = ProductEditForm(initial={"product_code": prod.product_code,
-                                             "product_name": prod.product_name,
-                                             "product_category": prod.product_category,
-                                             "product_unit_price": prod.product_unit_price,
-                                             "current_stock": prod.current_stock
-                                             })
+                                            "product_name": prod.product_name,
+                                            "product_category": prod.product_category,
+                                            "product_unit_price": prod.product_unit_price,
+                                            "current_stock": prod.current_stock
+                                            })
             return render(request, "all_forms.html",
                           context={"form": form,
                                    "title": "Edit Category",

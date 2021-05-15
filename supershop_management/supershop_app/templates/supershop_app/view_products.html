@@ -35,8 +35,8 @@
                     <td>{{ product.product_category }}</td>
                     <td>{{ product.product_unit_price }}</td>
                     <td>{{ product.current_stock }}</td>
-                    <td><a href="/supershop_admin/category/edit__{{ category.pk }}/"><i class="fas fa-edit"></i></a></td>
-                    <td><a onclick="deleteFunc({{ category.pk }})" href="" ><i class="fas fa-trash-alt"></i></a></td>
+                    <td><a href="/supershop_admin/category/edit__{{ product.pk }}/"><i class="fas fa-edit"></i></a></td>
+                    <td><a onclick="deleteFunc({{ product.pk }})" href="" ><i class="fas fa-trash-alt"></i></a></td>
                 </tr>
             {% endfor %}
             </tbody>

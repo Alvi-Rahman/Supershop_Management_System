@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
-from .forms import UserRegistrationForm, UserLoginForm, CategoryForm, CategoryEditForm
+from .forms import (UserRegistrationForm, UserLoginForm,
+                    CategoryForm, CategoryEditForm, ProductForm)
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from . import models
@@ -204,4 +205,62 @@ def admin_category_operation(request, ops):
 
 
 def admin_product_operation(request, ops):
-    pass
+    if request.method == "POST":
+        if ops == 'add':
+            form = ProductForm(request.POST)
+            if form.is_valid():
+                messages.success(request, "Succesfully added.")
+                form.save()
+            else:
+                messages.error(request, "Something Went Wrong.")
+            return redirect("/supershop_admin/product/add/")
+        elif 'edit' in ops:
+            cat_id = ops.split('__')[-1]
+            cat = models.ProductCategory.objects.filter(pk=cat_id).first()
+            form = CategoryForm(request.POST, instance=cat)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Succesfully Updated.")
+            else:
+                messages.error(request, "Something Went Wrong.")
+            return redirect("/supershop_admin/category/view/")
+        elif 'delete' in ops:
+            cat_id = ops.split('__')[-1]
+            # return JsonResponse(cat_id, safe=False)
+            cat = models.ProductCategory.objects.filter(pk=cat_id).delete()
+            return JsonResponse(1, safe=False)
+
+    elif request.method == 'GET':
+        if ops == 'add':
+            form = ProductForm()
+            return render(request, "all_forms.html",
+                          context={"form": form,
+                                   "title": "Add Product",
+                                   "admin": 1,
+                                   'logout': request.user.is_authenticated,
+                                   "btn_name": "ADD Product",
+                                   "admin_category": "active"})
+        elif ops == 'view':
+            categories = models.ProductCategory.objects.all()
+            return render(request, 'view_categories.html',
+                          context={
+                              "categories": categories,
+                              "title": "View Category",
+                              "admin": 1,
+                              'logout': request.user.is_authenticated,
+                              "admin_category": "active"
+                          })
+        elif 'edit' in ops:
+            cat_id = ops.split('__')[-1]
+            cat = models.ProductCategory.objects.filter(pk=cat_id).first()
+            form = CategoryEditForm(initial={"category_name": cat.category_name,
+                                             "category_code": cat.category_code})
+            return render(request, "all_forms.html",
+                          context={"form": form,
+                                   "title": "Edit Category",
+                                   "admin": 1,
+                                   'logout': request.user.is_authenticated,
+                                   "btn_name": "Edit Category",
+                                   "admin_category": "active"})
+        else:
+            return redirect("admin_product")

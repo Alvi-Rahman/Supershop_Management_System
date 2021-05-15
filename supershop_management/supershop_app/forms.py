@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 # from django.contrib.auth.models import User
-from .models import User, ProductCategory
+from .models import User, ProductCategory, Product
 
 
 class UserRegistrationForm(UserCreationForm):
@@ -48,3 +48,18 @@ class CategoryEditForm(forms.ModelForm):
     class Meta:
         model = ProductCategory
         fields = ('category_name', 'category_code')
+
+
+class ProductForm(forms.ModelForm):
+    product_name = forms.CharField(max_length=255, required=True,
+                                   widget=forms.TextInput(attrs={'class': 'form-control'}))
+    product_category = forms.ModelChoiceField(queryset=ProductCategory.objects.all(), required=True,
+                                              widget=forms.Select(attrs={'class': 'form-control'}))
+    product_unit_price = forms.CharField(max_length=255, required=True,
+                                         widget=forms.TextInput(attrs={'class': 'form-control'}))
+    current_stock = forms.CharField(max_length=255, required=True,
+                                    widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = Product
+        fields = ('product_name', 'product_category', 'product_unit_price', 'current_stock')

@@ -151,6 +151,22 @@ def admin_category_operation(request, ops):
             else:
                 messages.error(request, "Something Went Wrong.")
             return redirect("/supershop_admin/category/add/")
+        elif 'edit' in ops:
+            cat_id = ops.split('__')[-1]
+            cat = models.ProductCategory.objects.filter(pk=cat_id).first()
+            form = CategoryForm(request.POST, instance=cat)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Succesfully Updated.")
+            else:
+                messages.error(request, "Something Went Wrong.")
+            return redirect("/supershop_admin/category/view/")
+        elif 'delete' in ops:
+            cat_id = ops.split('__')[-1]
+            # return JsonResponse(cat_id, safe=False)
+            cat = models.ProductCategory.objects.filter(pk=cat_id).delete()
+            return JsonResponse(1, safe=False)
+
     elif request.method == 'GET':
         if ops == 'add':
             form = CategoryForm()
@@ -161,7 +177,7 @@ def admin_category_operation(request, ops):
                                    'logout': request.user.is_authenticated,
                                    "btn_name": "ADD Category",
                                    "admin_category": "active"})
-        if ops == 'view':
+        elif ops == 'view':
             categories = models.ProductCategory.objects.all()
             return render(request, 'view_categories.html',
                           context={
@@ -183,6 +199,8 @@ def admin_category_operation(request, ops):
                                    'logout': request.user.is_authenticated,
                                    "btn_name": "Edit Category",
                                    "admin_category": "active"})
+        else:
+            return redirect("admin_category")
 
 
 def admin_product_operation(request, ops):

@@ -239,16 +239,16 @@ def admin_product_operation(request, ops):
                                    "admin": 1,
                                    'logout': request.user.is_authenticated,
                                    "btn_name": "ADD Product",
-                                   "admin_category": "active"})
+                                   "admin_product": "active"})
         elif ops == 'view':
-            categories = models.ProductCategory.objects.all()
-            return render(request, 'view_categories.html',
+            products = models.Product.objects.all()
+            return render(request, 'view_products.html',
                           context={
-                              "categories": categories,
-                              "title": "View Category",
+                              "products": products,
+                              "title": "View Products",
                               "admin": 1,
                               'logout': request.user.is_authenticated,
-                              "admin_category": "active"
+                              "admin_product": "active"
                           })
         elif 'edit' in ops:
             cat_id = ops.split('__')[-1]

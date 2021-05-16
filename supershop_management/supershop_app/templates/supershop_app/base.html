@@ -107,7 +107,7 @@
                     {% endif %}
                     {% for left_util in left_utils %}
                         <li class="nav-item">
-                            <a class="nav-link {{ left_util.is_active }}" href="{{ left_util.url }}" id="cart-id">{{ left_util.name }}</a>
+                            <a class="nav-link {{ left_util.is_active }}" href="{{ left_util.url }}" id="{{ left_util.id }}">{{ left_util.name }}</a>
                         </li>
                     {% endfor %}
                 </ul>
@@ -138,18 +138,6 @@
         </script>
 
         {# ===== Script for Cart ====== #}
-
-
-        <script>
-            function check_cart() {
-                cart_state = $("#cart-id").text();
-                if (cart_state.includes("(") && cart_state.includes(")")){
-                    console.log("Not empty");
-                }else {
-                    console.log("Empty")
-                }
-            }
-        </script>
 
     </body>
 

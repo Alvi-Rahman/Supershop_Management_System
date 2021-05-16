@@ -300,8 +300,13 @@ def products(request):
                                "left_utils": [
                                    {
                                        "name": "Cart",
-                                       "url": "javascript:void;",
-                                       "is_active": "active"
+                                       "url": "javascript:;",
+                                       # "is_active": "active",
+                                       "id": "cart-id"
                                    }],
                                "right_utils": ["Cart"]
                                })
+
+
+def update_cart(request):
+    pass

@@ -41,7 +41,7 @@ class Order(models.Model):
     id = models.AutoField(primary_key=True)
     order_id = models.UUIDField(default=uuid.uuid4)
     purchased_products = models.ManyToManyField(Product)
-    purchase_by = models.ForeignKey(User, on_delete=models.SET_NULL)
+    purchase_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     order_placed = models.BooleanField(default=False)
 
     def __str__(self):

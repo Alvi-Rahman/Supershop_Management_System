@@ -29,7 +29,7 @@ def home(request):
                   })
 
 
-@login_required(login_url='/login/')
+@login_required(login_url='/supershop_admin/')
 def admin_home(request):
     return render(request, 'admin_home.html',
                   {
@@ -57,7 +57,7 @@ def signup(request):
             return render(request, 'all_forms.html', {'form': form,
                                                       "btn_name": "SignUp",
                                                       "title": "Sign Up",
-                                                      "active": "active"})
+                                                      "signup": "active"})
 
 
 def login_view(request):
@@ -83,7 +83,7 @@ def login_view(request):
             return render(request, "all_forms.html", context={"form": form,
                                                               "btn_name": "Login",
                                                               "title": "Login",
-                                                              "active": "active"})
+                                                              "login": "active"})
 
 
 def logout_view(request):

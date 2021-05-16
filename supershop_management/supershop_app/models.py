@@ -42,7 +42,9 @@ class Order(models.Model):
     order_id = models.UUIDField(default=uuid.uuid4)
     purchased_products = models.ManyToManyField(Product)
     purchase_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    order_placed = models.BooleanField(default=False)
 
     def __str__(self):
         return self.order_id
+
 

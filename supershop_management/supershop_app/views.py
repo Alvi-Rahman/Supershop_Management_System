@@ -24,7 +24,7 @@ import json
 def home(request):
     return render(request, 'home_page.html',
                   {
-                      'logout': request.user.is_authenticated,
+                      'is_logged_in': request.user.is_authenticated,
                       'home': 'active'
                   })
 
@@ -33,7 +33,7 @@ def home(request):
 def admin_home(request):
     return render(request, 'admin_home.html',
                   {
-                      'logout': request.user.is_authenticated,
+                      'is_logged_in': request.user.is_authenticated,
                       "admin": 1,
                       "admin_home": "active"
                   })
@@ -116,8 +116,8 @@ def supershop_admin(request):
         else:
             messages.error(request, "Invalid username or password.")
     elif request.method == 'GET':
-        if request.user.is_authenticated:
-            return redirect('home')
+        if request.user.is_authenticated and request.user.is_superuser:
+            return redirect('admin_home')
         else:
             form = UserLoginForm()
             return render(request, "all_forms.html", context={"form": form,

@@ -119,7 +119,7 @@ def supershop_admin(request):
             messages.error(request, "Invalid username or password.")
     elif request.method == 'GET':
         if request.user.is_authenticated and request.user.is_superuser:
-            if request.GET.get('next',None):
+            if request.GET.get('next', None):
                 return redirect(request.GET.get('next'))
             return redirect('admin_home')
         else:
@@ -292,9 +292,16 @@ def admin_product_operation(request, ops):
 
 def products(request):
     if request.method == 'GET':
-        return render(request, "product.html",
-                      context={'is_logged_in': request.user.is_authenticated,
-                               "title": "Product",
-                               "admin": 1,
-                               "admin_product": "active"
+        all_products = models.Product.objects.all()
+        return render(request, "products.html",
+                      context={"is_logged_in": request.user.is_authenticated,
+                               "products": all_products,
+                               "title": "Products",
+                               "left_utils": [
+                                   {
+                                       "name": "Cart",
+                                       "url": "javascript:void;",
+                                       "is_active": "active"
+                                   }],
+                               "right_utils": ["Cart"]
                                })

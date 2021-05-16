@@ -87,13 +87,15 @@
                     {% endif %}
 
                     {% if not admin %}
-                        <li class="nav-item {{ signup }}">
-                            <a class="nav-link" href="/signup/">Signup</a>
-                        </li>
+                        {% if not is_logged_in %}
+                            <li class="nav-item {{ signup }}">
+                                <a class="nav-link" href="/signup/">Signup</a>
+                            </li>
 
-                        <li class="nav-item {{ login }}">
-                            <a class="nav-link" href="/login/">LogIn</a>
-                        </li>
+                            <li class="nav-item {{ login }}">
+                                <a class="nav-link" href="/login/">LogIn</a>
+                            </li>
+                        {% endif %}
                     {% else %}
                         <li class="nav-item {{ admin_category }}">
                             <a class="nav-link" href="/supershop_admin/category/">Category</a>

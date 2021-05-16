@@ -5,6 +5,7 @@ from .forms import (UserRegistrationForm, UserLoginForm,
                     ProductEditForm)
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+# from django.db.models import F
 from . import models
 from django.http import JsonResponse
 import json
@@ -314,10 +315,14 @@ def update_order(request):
         prev_order = models.Order.objects.filter(purchase_by=request.user, order_placed=False).first()
         prod = models.Product.objects.filter(pk=request.POST['prod_id']).first()
         if prev_order is not None:
+            print("Has Prev Order")
             prev_order.purchased_products.add(prod)
-            prev_order.save()
-            return 1
+            return JsonResponse(1, safe=False)
         else:
+            print("1st Order")
             prev_order = models.Order.objects.create(purchase_by=request.user)
             prev_order.purchased_products.add(prod)
-            return 1
+            return JsonResponse(1, safe=False)
+    else:
+        prev_order = models.Order.objects.filter(purchase_by=request.user, order_placed=False).first()
+        return JsonResponse(json.dumps(prev_order.purchased_products.count(), default=str), safe=False)

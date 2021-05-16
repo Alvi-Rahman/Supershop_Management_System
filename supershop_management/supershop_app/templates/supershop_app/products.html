@@ -93,6 +93,16 @@
                 prod_id: prod_id
             },
             function(data){
+                {#console.log(data);#}
+
+            });
+
+            url = "{% url 'update_order' %}";
+            $.get(url,
+            {
+                prod_id: prod_id
+            },
+            function(data){
                 console.log(data);
 
             });

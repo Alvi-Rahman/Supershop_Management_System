@@ -310,13 +310,14 @@ def products(request):
 
 def update_order(request):
     if request.method == 'POST':
-        return JsonResponse(1, safe=False)
-        # prev_order = models.Order.objects.filter(purchase_by=request.user, order_placed=False).first()
-        # prod = models.Product.objects.filter(pk=request.POST['prod_id'])
-        # if prev_order is not None:
-        #     prev_order.purchased_products.add(prod)
-        #     return 1
-        # else:
-        #     prev_order = models.Order.objects.create(purchase_by=request.user)
-        #     prev_order.purchased_products.add(prod)
-        #     return 1
+        # return JsonResponse(1, safe=False)
+        prev_order = models.Order.objects.filter(purchase_by=request.user, order_placed=False).first()
+        prod = models.Product.objects.filter(pk=request.POST['prod_id']).first()
+        if prev_order is not None:
+            prev_order.purchased_products.add(prod)
+            prev_order.save()
+            return 1
+        else:
+            prev_order = models.Order.objects.create(purchase_by=request.user)
+            prev_order.purchased_products.add(prod)
+            return 1

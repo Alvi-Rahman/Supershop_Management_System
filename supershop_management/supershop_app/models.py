@@ -45,6 +45,6 @@ class Order(models.Model):
     order_placed = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.order_id
+        return str(self.order_id)
 
 

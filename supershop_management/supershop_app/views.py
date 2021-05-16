@@ -106,6 +106,7 @@ def supershop_admin(request):
             if user is not None:
                 if user.is_superuser:
                     login(request, user)
+                    messages.info(request, f"You are now logged in as {username}.")
                     return redirect("admin_home")
                 else:
                     messages.error(request, "You are not a superuser")

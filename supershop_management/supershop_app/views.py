@@ -133,7 +133,7 @@ def supershop_admin(request):
 @login_required(login_url='/supershop_admin/')
 def admin_category(request):
     if request.method == 'GET':
-        return render(request, "category.html",
+        return render(request, "admin_category.html",
                       context={'is_logged_in': request.user.is_authenticated,
                                "title": "Category",
                                "admin": 1,
@@ -144,7 +144,7 @@ def admin_category(request):
 @login_required(login_url='/supershop_admin/')
 def admin_product(request):
     if request.method == 'GET':
-        return render(request, "product.html",
+        return render(request, "admin_product.html",
                       context={'is_logged_in': request.user.is_authenticated,
                                "title": "Product",
                                "admin": 1,
@@ -291,4 +291,10 @@ def admin_product_operation(request, ops):
 # Order and main site
 
 def products(request):
-    pass
+    if request.method == 'GET':
+        return render(request, "product.html",
+                      context={'is_logged_in': request.user.is_authenticated,
+                               "title": "Product",
+                               "admin": 1,
+                               "admin_product": "active"
+                               })

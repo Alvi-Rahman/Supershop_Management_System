@@ -308,5 +308,5 @@ def products(request):
                                })
 
 
-def update_cart(request):
+def update_order(request):
     pass

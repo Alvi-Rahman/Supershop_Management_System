@@ -107,6 +107,8 @@ def supershop_admin(request):
                 if user.is_superuser:
                     login(request, user)
                     messages.info(request, f"You are now logged in as {username}.")
+                    if request.GET.get('next', None):
+                        return redirect(request.GET.get('next'))
                     return redirect("admin_home")
                 else:
                     messages.error(request, "You are not a superuser")
@@ -117,6 +119,8 @@ def supershop_admin(request):
             messages.error(request, "Invalid username or password.")
     elif request.method == 'GET':
         if request.user.is_authenticated and request.user.is_superuser:
+            if request.GET.get('next',None):
+                return redirect(request.GET.get('next'))
             return redirect('admin_home')
         else:
             form = UserLoginForm()
@@ -126,24 +130,29 @@ def supershop_admin(request):
                                                               "admin_login": "active"})
 
 
+@login_required(login_url='/supershop_admin/')
 def admin_category(request):
     if request.method == 'GET':
         return render(request, "category.html",
-                      context={"title": "Category",
+                      context={'is_logged_in': request.user.is_authenticated,
+                               "title": "Category",
                                "admin": 1,
                                "admin_category": "active"
                                })
 
 
+@login_required(login_url='/supershop_admin/')
 def admin_product(request):
     if request.method == 'GET':
         return render(request, "product.html",
-                      context={"title": "Product",
+                      context={'is_logged_in': request.user.is_authenticated,
+                               "title": "Product",
                                "admin": 1,
                                "admin_product": "active"
                                })
 
 
+@login_required(login_url='/supershop_admin/')
 def admin_category_operation(request, ops):
     if request.method == "POST":
         if ops == 'add':
@@ -174,7 +183,8 @@ def admin_category_operation(request, ops):
         if ops == 'add':
             form = CategoryForm()
             return render(request, "all_forms.html",
-                          context={"form": form,
+                          context={'is_logged_in': request.user.is_authenticated,
+                                   "form": form,
                                    "title": "Add Category",
                                    "admin": 1,
                                    'logout': request.user.is_authenticated,
@@ -184,6 +194,7 @@ def admin_category_operation(request, ops):
             categories = models.ProductCategory.objects.all()
             return render(request, 'view_categories.html',
                           context={
+                              'is_logged_in': request.user.is_authenticated,
                               "categories": categories,
                               "title": "View Category",
                               "admin": 1,
@@ -196,7 +207,8 @@ def admin_category_operation(request, ops):
             form = CategoryEditForm(initial={"category_name": cat.category_name,
                                              "category_code": cat.category_code})
             return render(request, "all_forms.html",
-                          context={"form": form,
+                          context={'is_logged_in': request.user.is_authenticated,
+                                   "form": form,
                                    "title": "Edit Category",
                                    "admin": 1,
                                    'logout': request.user.is_authenticated,
@@ -206,6 +218,7 @@ def admin_category_operation(request, ops):
             return redirect("admin_category")
 
 
+@login_required(login_url='/supershop_admin/')
 def admin_product_operation(request, ops):
     if request.method == "POST":
         if ops == 'add':
@@ -236,17 +249,19 @@ def admin_product_operation(request, ops):
         if ops == 'add':
             form = ProductForm()
             return render(request, "all_forms.html",
-                          context={"form": form,
+                          context={"is_logged_in": request.user.is_authenticated,
+                                   "form": form,
                                    "title": "Add Product",
                                    "admin": 1,
                                    'logout': request.user.is_authenticated,
                                    "btn_name": "ADD Product",
                                    "admin_product": "active"})
         elif ops == 'view':
-            products = models.Product.objects.all()
+            all_products = models.Product.objects.all()
             return render(request, 'view_products.html',
                           context={
-                              "products": products,
+                              'is_logged_in': request.user.is_authenticated,
+                              "products": all_products,
                               "title": "View Products",
                               "admin": 1,
                               'logout': request.user.is_authenticated,
@@ -262,7 +277,8 @@ def admin_product_operation(request, ops):
                                             "current_stock": prod.current_stock
                                             })
             return render(request, "all_forms.html",
-                          context={"form": form,
+                          context={'is_logged_in': request.user.is_authenticated,
+                                   "form": form,
                                    "title": "Edit Category",
                                    "admin": 1,
                                    'logout': request.user.is_authenticated,

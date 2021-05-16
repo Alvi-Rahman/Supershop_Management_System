@@ -270,3 +270,9 @@ def admin_product_operation(request, ops):
                                    "admin_product": "active"})
         else:
             return redirect("admin_product")
+
+
+# Order and main site
+
+def products(request):
+    pass

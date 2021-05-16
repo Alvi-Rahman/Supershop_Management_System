@@ -80,6 +80,20 @@
                 return false
             }
         }
+
+
+        function updateOrderAjaxRequest(){
+            url = "/supershop_admin/product/delete__"+pk+"/";
+
+            $.post(url,
+            {
+                data: pk
+            },
+            function(data){
+                console.log(data);
+
+            });
+        }
     </script>
 
 

@@ -5,7 +5,7 @@ from .forms import (UserRegistrationForm, UserLoginForm,
                     ProductEditForm)
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.db.models import F
+from django.db.models import F, Sum
 from . import models
 from django.http import JsonResponse
 import json
@@ -331,5 +331,5 @@ def update_cart(request):
     else:
         prev_order = models.Order.objects.filter(purchase_by=request.user, order_placed=False).first()
         if prev_order is None:
-            return JsonResponse(None, safe=False)
-        return JsonResponse(json.dumps(prev_order.purchased_products.all(), default=str), safe=False)
+            return JsonResponse(0, safe=False)
+        return JsonResponse(prev_order.purchased_products.aggregate(Sum('product_count'))['product_count__sum'], safe=False)

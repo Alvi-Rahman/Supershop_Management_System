@@ -96,17 +96,13 @@
                 {#console.log(data);#}
 
             });
-
-            url = "{% url 'update_cart' %}";
-            $.get(url,
-            {
-                prod_id: prod_id
-            },
-            function(data){
-                console.log(data);
-
-            });
         }
+        url = "{% url 'update_cart' %}";
+        $.get(url,
+        function(data){
+            console.log(data);
+
+        });
     </script>
 
 

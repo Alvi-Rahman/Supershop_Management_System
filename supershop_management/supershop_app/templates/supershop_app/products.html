@@ -87,7 +87,7 @@
 
 
         function updateOrderAjaxRequest(prod_id){
-            url = "{% url 'update_order' %}";
+            url = "{% url 'update_cart' %}";
             $.post(url,
             {
                 prod_id: prod_id
@@ -97,7 +97,7 @@
 
             });
 
-            url = "{% url 'update_order' %}";
+            url = "{% url 'update_cart' %}";
             $.get(url,
             {
                 prod_id: prod_id

@@ -309,7 +309,7 @@ def products(request):
                                })
 
 
-def update_order(request):
+def update_cart(request):
     if request.method == 'POST':
         # return JsonResponse(1, safe=False)
         prev_order = models.Order.objects.filter(purchase_by=request.user, order_placed=False).first()

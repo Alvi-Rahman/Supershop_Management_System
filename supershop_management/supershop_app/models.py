@@ -32,7 +32,6 @@ class Product(models.Model):
     product_category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
     product_unit_price = models.FloatField(default=0.0)
     current_stock = models.IntegerField(default=0)
-    product_count = models.IntegerField(default=1)
 
     def __str__(self):
         return self.product_name

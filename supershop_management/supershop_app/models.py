@@ -50,7 +50,7 @@ class Cart(models.Model):
 class Order(models.Model):
     id = models.AutoField(primary_key=True)
     order_id = models.UUIDField(default=uuid.uuid4)
-    purchased_products = models.ManyToManyField(Product)
+    purchased_products = models.ManyToManyField(Cart, db_constraint=False)
     purchase_by = models.ForeignKey(User, on_delete=models.SET_NULL, db_constraint=False, null=True)
     order_placed = models.BooleanField(default=False)
 

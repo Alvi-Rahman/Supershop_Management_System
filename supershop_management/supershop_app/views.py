@@ -5,7 +5,7 @@ from .forms import (UserRegistrationForm, UserLoginForm,
                     ProductEditForm)
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-# from django.db.models import F
+from django.db.models import F
 from . import models
 from django.http import JsonResponse
 import json
@@ -316,13 +316,20 @@ def update_cart(request):
         prod = models.Product.objects.filter(pk=request.POST['prod_id']).first()
         if prev_order is not None:
             print("Has Prev Order")
-            prev_order.purchased_products.add(prod)
+            cart = prev_order.purchased_products.filter(
+                    added_products__pk=prod.pk).update(product_count=F('product_count')+1)
+            if cart == 0:
+                cart = models.Cart.objects.create(added_products=prod)
+                prev_order.purchased_products.add(cart)
             return JsonResponse(1, safe=False)
         else:
             print("1st Order")
-            prev_order = models.Order.objects.create(purchase_by=request.user)
-            prev_order.purchased_products.add(prod)
+            cart = models.Cart.objects.create(added_products=prod)
+            order = models.Order.objects.create(purchase_by=request.user)
+            order.purchased_products.add(cart)
             return JsonResponse(1, safe=False)
     else:
         prev_order = models.Order.objects.filter(purchase_by=request.user, order_placed=False).first()
-        return JsonResponse(json.dumps(prev_order.purchased_products.count(), default=str), safe=False)
+        if prev_order is None:
+            return JsonResponse(None, safe=False)
+        return JsonResponse(json.dumps(prev_order.purchased_products.all(), default=str), safe=False)

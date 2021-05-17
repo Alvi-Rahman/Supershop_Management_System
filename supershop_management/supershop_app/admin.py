@@ -21,8 +21,7 @@ class ProductAdmin(admin.ModelAdmin):
         "product_name",
         "product_category",
         "product_unit_price",
-        "current_stock",
-        "product_count"
+        "current_stock"
     ]
     list_filter = [
         "product_category"

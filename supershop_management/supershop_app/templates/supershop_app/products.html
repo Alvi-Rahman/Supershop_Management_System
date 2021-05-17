@@ -53,7 +53,8 @@
                     $("#cart-id").removeClass("active");
                     txt = "Cart";
                     updateOrderAjaxRequest(prod_id);
-                }else {
+                }
+                else {
                     $("#cart-id").addClass("active");
                     txt = "Cart("+qty+")";
                     updateOrderAjaxRequest(prod_id);
@@ -97,12 +98,26 @@
 
             });
         }
-        url = "{% url 'update_cart' %}";
-        $.get(url,
-        function(data){
-            console.log(data);
+        function getQtyFromDB() {
+            var response = 0
+            url = "{% url 'update_cart' %}";
+            $.get(url,
+            function(data){
+                response = data;
+            });
+            return response;
+        }
 
-        });
+        function updateCartOnLoad(){
+            $.ajaxSetup({async:false});
+            qty = getQtyFromDB()
+            if(qty > 0){
+                $("#cart-id").addClass("active");
+                txt = "Cart("+qty+")";
+                $("#cart-id").html(txt);
+            }
+        };
+        updateCartOnLoad();
     </script>
 
 

@@ -23,12 +23,12 @@
                                 <h6> {{ product.product_category}} </h6>
                                 <h5> {{ product.product_unit_price}} BDT </h5>
 
-                                <a href="javascript:;" onclick="updateCart({{ product.current_stock }}, 1, {{ product.pk }})">
+                                <a href="javascript:;" onclick="updateCart(1, {{ product.pk }})">
                                     <span style="font-size: 20px; color: #006b1b">
                                         <i class="fas fa-plus-circle"></i>
                                     </span>
                                 </a>
-                                <a href="javascript:;" onclick="updateCart({{ product.current_stock }}, -1, {{ product.pk }})">
+                                <a href="javascript:;" onclick="updateCart(-1, {{ product.pk }})">
                                     <span style="font-size: 20px; color: #ba2121;">
                                         <i class="fas fa-minus-circle"></i>
                                     </span>
@@ -45,30 +45,35 @@
 
     <script>
     
-        function updateCart(current_stock , op, prod_id) {
+        function updateCart(op, prod_id) {
+            let response = null;
+            let txt = "";
+            let qty = "";
             if(checkCart()){
                 qty = getQty();
                 qty += parseInt(op);
                 if (qty === 0){
                     $("#cart-id").removeClass("active");
                     txt = "Cart";
-                    updateOrderAjaxRequest(prod_id);
+                    response = updateOrderAjaxRequest(prod_id, op);
                 }
                 else {
                     $("#cart-id").addClass("active");
                     txt = "Cart("+qty+")";
-                    updateOrderAjaxRequest(prod_id);
+                    response = updateOrderAjaxRequest(prod_id, op);
                 }
-                $("#cart-id").html(txt);
             }else {
                 if (op === -1){
                     txt = "Cart";
-                    updateOrderAjaxRequest(prod_id);
+                    {#response = updateOrderAjaxRequest(prod_id, op);#}
                 }else {
                     $("#cart-id").addClass("active");
                     txt = "Cart("+1+")";
-                    updateOrderAjaxRequest(prod_id);
+                    response = updateOrderAjaxRequest(prod_id, op);
                 }
+            }
+            if (response === 1){
+                console.log(response)
                 $("#cart-id").html(txt);
             }
         }
@@ -87,19 +92,22 @@
         }
 
 
-        function updateOrderAjaxRequest(prod_id){
+        function updateOrderAjaxRequest(prod_id, op){
+            let response = 0
             url = "{% url 'update_cart' %}";
             $.post(url,
             {
-                prod_id: prod_id
+                prod_id: prod_id,
+                op: op
             },
             function(data){
                 {#console.log(data);#}
-
+                response = data;
             });
+            return response;
         }
         function getQtyFromDB() {
-            var response = 0
+            let response = 0
             url = "{% url 'update_cart' %}";
             $.get(url,
             function(data){
@@ -109,7 +117,6 @@
         }
 
         function updateCartOnLoad(){
-            $.ajaxSetup({async:false});
             qty = getQtyFromDB()
             if(qty > 0){
                 $("#cart-id").addClass("active");
@@ -117,6 +124,7 @@
                 $("#cart-id").html(txt);
             }
         };
+        $.ajaxSetup({async:false});
         updateCartOnLoad();
     </script>
 

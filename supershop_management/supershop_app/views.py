@@ -6,6 +6,7 @@ from .forms import (UserRegistrationForm, UserLoginForm,
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import F, Sum
+from django.db.utils import IntegrityError
 from . import models
 from django.http import JsonResponse
 import json
@@ -313,17 +314,21 @@ def update_cart(request):
     if request.method == 'POST':
         # return JsonResponse(1, safe=False)
         prev_order = models.Order.objects.filter(purchase_by=request.user, order_placed=False).first()
-        prod = models.Product.objects.filter(pk=request.POST['prod_id']).first()
+        prod = models.Product.objects.filter(pk=request.POST['prod_id'], current_stock__gt=0).first()
+        op = int(request.POST['op'])
+        if prod is None:
+            return JsonResponse(0, safe=False)
         if prev_order is not None:
-            print("Has Prev Order")
-            cart = prev_order.purchased_products.filter(
-                    added_products__pk=prod.pk).update(product_count=F('product_count')+1)
+            try:
+                cart = prev_order.purchased_products.filter(
+                        added_products__pk=prod.pk).update(product_count=F('product_count')+op)
+            except IntegrityError:
+                return JsonResponse(0, safe=False)
             if cart == 0:
                 cart = models.Cart.objects.create(added_products=prod)
                 prev_order.purchased_products.add(cart)
             return JsonResponse(1, safe=False)
         else:
-            print("1st Order")
             cart = models.Cart.objects.create(added_products=prod)
             order = models.Order.objects.create(purchase_by=request.user)
             order.purchased_products.add(cart)

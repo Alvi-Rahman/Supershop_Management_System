@@ -41,6 +41,7 @@ class Cart(models.Model):
     id = models.AutoField(primary_key=True)
     cart_code = models.UUIDField(default=uuid.uuid4)
     added_products = models.ForeignKey(Product, on_delete=models.SET_NULL, db_constraint=False, null=True)
+    product_count = models.PositiveIntegerField(default=1)
 
     def __str__(self):
         return str(self.cart_code)

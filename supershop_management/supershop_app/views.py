@@ -293,7 +293,7 @@ def admin_product_operation(request, ops):
 
 def products(request):
     if request.method == 'GET':
-        all_products = models.Product.objects.all()
+        all_products = models.Product.objects.filter(current_stock__gt=0)
         return render(request, "products.html",
                       context={"is_logged_in": request.user.is_authenticated,
                                "products": all_products,

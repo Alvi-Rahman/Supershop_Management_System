@@ -338,3 +338,7 @@ def update_cart(request):
         if prev_order is None:
             return JsonResponse(0, safe=False)
         return JsonResponse(prev_order.purchased_products.aggregate(Sum('product_count'))['product_count__sum'], safe=False)
+
+
+def cart_view(request):
+    return render(request, "cart_template.html")

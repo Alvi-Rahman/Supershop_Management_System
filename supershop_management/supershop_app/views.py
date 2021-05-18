@@ -305,8 +305,8 @@ def products(request):
                                        "url": "/cart/",
                                        # "is_active": "active",
                                        "id": "cart-id"
-                                   }],
-                               "right_utils": ["Cart"]
+                                   }]
+                               # "right_utils": ["Cart"]
                                })
 
 
@@ -342,4 +342,17 @@ def update_cart(request):
 
 
 def cart_view(request):
-    return render(request, "cart_template.html")
+    cart_product = models.Order.objects.filter(purchase_by=request.user, order_placed=False).first()
+    context = {
+                "cart_products": cart_product.purchased_products.filter(product_count__gt=0),
+                "is_logged_in": request.user.is_authenticated,
+                "title": "Cart",
+                "left_utils": [
+                    {
+                        "name": "Products",
+                        "url": "/products/",
+                        "id": "cart-id"
+                    }]
+              }
+
+    return render(request, "cart_template.html", context=context)

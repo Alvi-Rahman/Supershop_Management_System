@@ -343,8 +343,13 @@ def update_cart(request):
 
 def cart_view(request):
     cart_product = models.Order.objects.filter(purchase_by=request.user, order_placed=False).first()
+    total_orders = models.Order.objects.filter(purchase_by=request.user, order_placed=False).first()
+    if total_orders is None:
+        total_orders = 0
+    total_orders = total_orders.purchased_products.aggregate(Sum('product_count'))['product_count__sum']
     context = {
                 "cart_products": cart_product.purchased_products.filter(product_count__gt=0),
+                "total_orders": total_orders,
                 "is_logged_in": request.user.is_authenticated,
                 "title": "Cart",
                 "left_utils": [

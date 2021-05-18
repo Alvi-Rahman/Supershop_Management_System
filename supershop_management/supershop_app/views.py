@@ -321,7 +321,7 @@ def update_cart(request):
         if prev_order is not None:
             try:
                 cart = prev_order.purchased_products.filter(
-                        added_products__pk=prod.pk).update(product_count=F('product_count')+op)
+                    added_products__pk=prod.pk).update(product_count=F('product_count') + op)
             except IntegrityError:
                 return JsonResponse(0, safe=False)
             if cart == 0:
@@ -337,7 +337,8 @@ def update_cart(request):
         prev_order = models.Order.objects.filter(purchase_by=request.user, order_placed=False).first()
         if prev_order is None:
             return JsonResponse(0, safe=False)
-        return JsonResponse(prev_order.purchased_products.aggregate(Sum('product_count'))['product_count__sum'], safe=False)
+        return JsonResponse(prev_order.purchased_products.aggregate(Sum('product_count'))['product_count__sum'],
+                            safe=False)
 
 
 def cart_view(request):

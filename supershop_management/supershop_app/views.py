@@ -302,7 +302,7 @@ def products(request):
                                "left_utils": [
                                    {
                                        "name": "Cart",
-                                       "url": "/cart/;",
+                                       "url": "/cart/",
                                        # "is_active": "active",
                                        "id": "cart-id"
                                    }],

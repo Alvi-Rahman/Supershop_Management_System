@@ -1,10 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %} {{ title }} | Supershop {% endblock %}
+{% load static %}
 
-</body>
-</html>
+{% block content %}
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="container">
+        <div class="m-5 text-center">
+            <div class="row">
+                {% for product in products %}
+                    <div class="col-md-3 my-2">
+                        <div class="card shadow" style="width: 15rem;">
+                            <div class="card-body">
+                                <h4 class="card-title">{{ product.product_name}}</h4>
+                                <h6> {{ product.product_category}} </h6>
+                                <h5> {{ product.product_unit_price}} BDT </h5>
+
+                                <a href="javascript:;" onclick="updateCart(1, {{ product.pk }})">
+                                    <span style="font-size: 20px; color: #006b1b">
+                                        <i class="fas fa-plus-circle"></i>
+                                    </span>
+                                </a>
+                                <a href="javascript:;" onclick="updateCart(-1, {{ product.pk }})">
+                                    <span style="font-size: 20px; color: #ba2121;">
+                                        <i class="fas fa-minus-circle"></i>
+                                    </span>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}

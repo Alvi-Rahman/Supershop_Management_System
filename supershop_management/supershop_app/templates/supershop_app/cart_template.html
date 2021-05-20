@@ -29,45 +29,46 @@
 
                                 <h4 class="mb-4">Cart (<span>{{ total_orders }}</span> items)</h4>
 
-                                {#     TODO ForLoop  #}
-                                <div class="row mb-4">
-
-                                    <div class="col-md-12 col-lg-12 col-xl-12 px-5">
-                                        <div>
-                                            <div class="d-flex justify-content-between">
-                                                <div>
-                                                    <h5>Blue denim shirt</h5>
-                                                    <p class="mb-3 text-muted text-uppercase small">Shirt - blue</p>
-                                                    <p class="mb-2 text-muted text-uppercase small">Color: blue</p>
-                                                    <p class="mb-3 text-muted text-uppercase small">Size: M</p>
-                                                </div>
-                                                <div>
-                                                    <div class="def-number-input number-input safari_only mb-0 w-100">
-                                                        <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
-                                                        class="decrease"><i class="fas fa-minus"></i></button>
-                                                        <label>
-                                                            <input class="quantity form-control" min="0" name="quantity" value="1" type="number">
-                                                        </label>
-                                                        <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
-                                                        class="increase"><i class="fas fa-plus"></i></button>
+                                {#  TODO ForLoop  #}
+                                {% for cart_product in cart_products %}
+                                    <div class="row mb-4">
+                                        <div class="col-md-12 col-lg-12 col-xl-12 px-5">
+                                            <div>
+                                                <div class="d-flex justify-content-between">
+                                                    <div>
+                                                        <h5>{{ cart_product.added_products.product_name }}</h5>
+                                                        <p class="mb-3 text-muted text-uppercase small">Category - {{ cart_product.added_products.product_category.category_name }}</p>
+                                                        <p class="mb-2 text-muted text-uppercase small">Unit Price: {{ cart_product.added_products.product_unit_price }}</p>
+{#                                                        <p class="mb-3 text-muted text-uppercase small">Size: M</p>#}
                                                     </div>
+                                                    <div>
+                                                        <div class="def-number-input number-input safari_only mb-0 w-100">
+                                                            <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
+                                                            class="decrease"><i class="fas fa-minus"></i></button>
+                                                            <label>
+                                                                <input class="quantity form-control" min="0" name="quantity" value="{{ cart_product.product_count }}" type="number">
+                                                            </label>
+                                                            <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
+                                                            class="increase"><i class="fas fa-plus"></i></button>
+                                                        </div>
 
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <a href="#!" type="button" class="card-link-secondary small text-uppercase mr-3"><i
-                                                        class="fas fa-trash-alt mr-1"></i> Remove item </a>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <a href="#!" type="button" class="card-link-secondary small text-uppercase mr-3"><i
+                                                            class="fas fa-trash-alt mr-1"></i> Remove item </a>
 
+                                                    </div>
+                                                    <p class="mb-0"><span><strong id="summary">$17.99</strong></span></p>
                                                 </div>
-                                                <p class="mb-0"><span><strong id="summary">$17.99</strong></span></p>
                                             </div>
                                         </div>
                                     </div>
 
-                                </div>
-                                <hr class="mb-4">
+                                    <hr class="mb-4">
 
+                                {% endfor %}
 
                                 <p class="text-primary mb-0"><i class="fas fa-info-circle mr-1"></i> Do not delay the purchase, adding
                                 items to your cart does not mean booking them.</p>

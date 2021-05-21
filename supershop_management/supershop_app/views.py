@@ -393,7 +393,7 @@ def generate_pdf(name, img_data, qr_path, invoice_path, file_name, order):
     col_width = epw / 6
     th = pdf.font_size
     pdf.ln(4 * th)
-    pdf.set_font('Arial', 'B', 18.0)
+    pdf.set_font('Arial', 'B', 15.0)
 
     pdf.cell(200, 10, txt=f"Invoice of {name}",
              ln=1, align='C')
@@ -463,9 +463,9 @@ def finalize_order_and_make_invoice(request):
         order.save()
 
         name = request.user.username
-        img_data = f'Username: {request.user.full_name} \n' \
-                   f'Full Name: {request.user.username} \n' \
-                   f' Email: {request.user.email} \n' \
+        img_data = f'Username: {request.user.username} \n ' \
+                   f'Full Name: {request.user.full_name} \n ' \
+                   f' Email: {request.user.email} \n ' \
                    f' Phone no. : {request.user.phone} \n ' \
                    f'Invoice: {str(order.order_id)}'
         invoice = generate_pdf(

@@ -53,6 +53,9 @@ class Order(models.Model):
     purchased_products = models.ManyToManyField(Cart, db_constraint=False)
     purchase_by = models.ForeignKey(User, on_delete=models.SET_NULL, db_constraint=False, null=True)
     order_placed = models.BooleanField(default=False)
+    vat_price = models.FloatField(default=0)  # Can create a seperate model for it
+    total_amount = models.FloatField(default=0)  # For Cross Matching and Ease
+
 
     def __str__(self):
         return str(self.order_id)

@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block title %} {{ title }} | Supershop {% endblock %}
 {% load static %}
+{% load custom_tags %}
 
 {% block content %}
 
@@ -37,7 +38,7 @@
                                                 <div class="d-flex justify-content-between">
                                                     <div>
                                                         <h5>{{ cart_product.added_products.product_name }}</h5>
-                                                        <p class="mb-3 text-muted text-uppercase small">Category - {{ cart_product.added_products.product_category.category_name }}</p>
+                                                        <p class="mb-3 text-muted text-uppercase small">Category - {{ cart_product.added_products.product_category.category_name }} </p>
                                                         <p class="mb-2 text-muted text-uppercase small">Unit Price: {{ cart_product.added_products.product_unit_price }}</p>
 {#                                                        <p class="mb-3 text-muted text-uppercase small">Size: M</p>#}
                                                     </div>
@@ -60,7 +61,7 @@
                                                             class="fas fa-trash-alt mr-1"></i> Remove item </a>
 
                                                     </div>
-                                                    <p class="mb-0"><span><strong id="summary">$17.99</strong></span></p>
+                                                    <p class="mb-0"><span> BDT <strong id="summary"> {{ cart_product.added_products.product_unit_price|calculate_total_price:cart_product.product_count }} </strong></span></p>
                                                 </div>
                                             </div>
                                         </div>

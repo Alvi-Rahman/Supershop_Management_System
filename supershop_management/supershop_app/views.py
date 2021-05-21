@@ -378,3 +378,7 @@ def remove_item_from_cart(request):
                 return JsonResponse(0, safe=False)
     else:
         return JsonResponse(0, safe=False)
+
+
+def finalize_order_and_make_invoice(request):
+    pass

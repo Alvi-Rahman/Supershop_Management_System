@@ -7,12 +7,13 @@ from .models import User, ProductCategory, Product
 class UserRegistrationForm(UserCreationForm):
     username = forms.CharField(max_length=30, required=True,
                                widget=forms.TextInput(attrs={'class': 'form-control'}))
-    email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.',
+    email = forms.EmailField(max_length=255, help_text='Required. Inform a valid email address.',
                              widget=forms.EmailInput(attrs={'class': 'form-control'}))
+    phone = forms.CharField(max_length=15, required=False, widget=forms.EmailInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = User
-        fields = ('username', 'email',)
+        fields = ('username', 'email', 'phone')
     #
     # def __init__(self, *args, **kwargs):
     #     super(UserRegistrationForm, self).__init__(*args, **kwargs)

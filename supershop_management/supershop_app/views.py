@@ -430,8 +430,14 @@ def finalize_order_and_make_invoice(request):
         amt_without_vat_and_sd = float(request.POST["amtWithoutVatAndSD"])
         vat = float(request.POST["vat"])
         order_id = int(request.POST['orderId'])
+
+        name = request.user.username
+        img_data = f'Name: {request.user.username} \n email: {request.user.email}'
+        # invoice = generate_pdf(
+        #                         name=name
+        #                     )
         prev_order = models.Order.objects.filter(
             purchase_by=request.user, order_placed=False, pk=order_id
-        ).update(total_amount=amt_without_vat_and_sd, vat_price=vat)
+        ).update(total_amount=amt_without_vat_and_sd, vat_price=vat, order_placed=True)
         pass
         # return JsonResponse(json.dumps(request.POST, default=str), safe=False)

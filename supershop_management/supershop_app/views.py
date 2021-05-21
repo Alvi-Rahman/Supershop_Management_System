@@ -392,7 +392,7 @@ def generate_pdf(name, img_data, qr_path, invoice_path, file_name, data):
     pdf.ln(4 * th)
     pdf.set_font('Arial', 'B', 14.0)
 
-    pdf.cell(200, 10, txt="Invoice"+str(name),
+    pdf.cell(200, 10, txt="Invoice" + str(name),
              ln=1, align='C')
     img_data = json.dumps(img_data)
     qr = qrcode.QRCode(
@@ -406,22 +406,30 @@ def generate_pdf(name, img_data, qr_path, invoice_path, file_name, data):
     img = qr.make_image(fill_color="black", back_color="white")
     if not os.path.exists(qr_path):
         os.mkdir(qr_path)
-    img_name = file_name+str('.png')
+    img_name = file_name + str('.png')
     img_path = os.path.join(qr_path, img_name)
     img.save(img_path)
     pdf.image(img_path)
     sl = 0
     for row in data:
         if sl == 0:
-            pass
-        for datum in row:
-            pdf.cell(col_width, 2 * th, str(datum), border=1)
+            for d in ['SL No.', 'Item', 'Unit Price', 'QTY', 'Total']:
+                pdf.cell(col_width, 2 * th, str(d), border=1)
+        else:
+            pdf.cell(col_width, 2 * th, str(sl), border=1)
+            # for datum in row:
+            pdf.cell(col_width, 2 * th, str(row.added_products.product_name), border=1)
+            pdf.cell(col_width, 2 * th, str(row.added_products.product_unit_price), border=1)
+            pdf.cell(col_width, 2 * th, str(row.product_count), border=1)
+            pdf.cell(col_width, 2 * th, str((row.product_count * row.added_products.product_unit_price)), border=1)
+
+        sl += 1
         pdf.ln(2 * th)
 
     if not os.path.exists(invoice_path):
         os.mkdir(invoice_path)
 
-    pdf_name = file_name+str('.pdf')
+    pdf_name = file_name + str('.pdf')
     actual_invoice_path = os.path.join(invoice_path, pdf_name)
     _ = pdf.output(actual_invoice_path, 'F')
 
@@ -434,20 +442,21 @@ def finalize_order_and_make_invoice(request):
         vat = float(request.POST["vat"])
         order_id = int(request.POST['orderId'])
 
-        # order = models.Order.objects.filter(pk=order_id).first()
-        # name = request.user.username
-        # img_data = f'Name: {request.user.username} \n' \
-        #            f' Email: {request.user.email} \n' \
-        #            f' Phone no. : {request.user.phone} \n ' \
-        #            f'Invoice: {str(order.order_id)}'
-        # invoice = generate_pdf(
-        #                         name=name,
-        #                         img_data=img_data,
-        #                         qr_path='qr_images',
-        #                         invoice_path='invoices',
-        #                         file_name=str(order.order_id),
-        #                         data=order.purchased_products
-        #                     )
+        order = models.Order.objects.filter(pk=order_id).first()
+        name = request.user.username
+        img_data = f'Username: {request.user.full_name} \n' \
+                   f'Full Name: {request.user.username} \n' \
+                   f' Email: {request.user.email} \n' \
+                   f' Phone no. : {request.user.phone} \n ' \
+                   f'Invoice: {str(order.order_id)}'
+        invoice = generate_pdf(
+            name=name,
+            img_data=img_data,
+            qr_path='qr_images',
+            invoice_path='invoices',
+            file_name=str(order.order_id),
+            data=order.purchased_products.all()
+        )
         prev_order = models.Order.objects.filter(
             purchase_by=request.user, order_placed=False, pk=order_id
         ).update(total_amount=amt_without_vat_and_sd, vat_price=vat, order_placed=True)

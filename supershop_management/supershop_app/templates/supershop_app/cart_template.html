@@ -200,6 +200,24 @@
                 }
             });
         }
+        
+        function getAmountsForFinalizeOrder() {
+            let amtWithoutVatAndSD = $('#total-amount-id').html();
+            let vat = $('#vat-id').html();
+            let orderId = "{{ order_id }}";
+            url = "{% url 'finalize_order_and_make_invoice' %}";
+            $.post(url,
+            {
+                amtWithoutVatAndSD,
+                vat,
+                orderId
+            },
+            function(data){
+                data = JSON.parse(data);
+                console.log(data);
+            });
+
+        }
 
         calcTotalAmt();
     </script>

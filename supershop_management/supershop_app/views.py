@@ -12,6 +12,7 @@ from django.http import JsonResponse
 from fpdf import FPDF
 import qrcode
 import json
+import os
 
 
 # class HomePage(LoginRequiredMixin, View):
@@ -351,17 +352,18 @@ def cart_view(request):
     total_orders = total_orders.purchased_products.aggregate(Sum('product_count'))['product_count__sum']
 
     context = {
-                "cart_products": cart_product.purchased_products.filter(product_count__gt=0),
-                "total_orders": total_orders,
-                "is_logged_in": request.user.is_authenticated,
-                "title": "Cart",
-                "left_utils": [
-                    {
-                        "name": "Products",
-                        "url": "/products/",
-                        "id": "cart-id"
-                    }]
-              }
+        "cart_products": cart_product.purchased_products.filter(product_count__gt=0),
+        "order_id": cart_product.pk,
+        "total_orders": total_orders,
+        "is_logged_in": request.user.is_authenticated,
+        "title": "Cart",
+        "left_utils": [
+            {
+                "name": "Products",
+                "url": "/products/",
+                "id": "cart-id"
+            }]
+    }
 
     return render(request, "cart_template.html", context=context)
 
@@ -380,5 +382,56 @@ def remove_item_from_cart(request):
         return JsonResponse(0, safe=False)
 
 
+def generate_pdf(name, img_data, qr_path, invoice_path, file_name, data):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", size=28)
+    epw = pdf.w - 2 * pdf.l_margin
+    col_width = epw / 4
+    th = pdf.font_size
+    pdf.ln(4 * th)
+    pdf.set_font('Arial', 'B', 14.0)
+
+    pdf.cell(200, 10, txt="Invoice"+str(name),
+             ln=1, align='C')
+    img_data = json.dumps(img_data)
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=8,
+        border=2,
+    )
+    qr.add_data(img_data)
+    qr.make(fit=True)
+    img = qr.make_image(fill_color="black", back_color="white")
+    if not os.path.exists(qr_path):
+        os.mkdir(qr_path)
+    img_name = file_name+str('.png')
+    img_path = os.path.join(qr_path, img_name)
+    img.save(img_path)
+    pdf.image(img_path)
+    for row in data:
+        for datum in row:
+            pdf.cell(col_width, 2 * th, str(datum), border=1)
+        pdf.ln(2 * th)
+
+    if not os.path.exists(invoice_path):
+        os.mkdir(invoice_path)
+
+    pdf_name = file_name+str('.pdf')
+    actual_invoice_path = os.path.join(invoice_path, pdf_name)
+    _ = pdf.output(actual_invoice_path, 'F')
+
+    return actual_invoice_path
+
+
 def finalize_order_and_make_invoice(request):
-    pass
+    if request.method == 'POST':
+        amt_without_vat_and_sd = float(request.POST["amtWithoutVatAndSD"])
+        vat = float(request.POST["vat"])
+        order_id = int(request.POST['orderId'])
+        prev_order = models.Order.objects.filter(
+            purchase_by=request.user, order_placed=False, pk=order_id
+        ).update(total_amount=amt_without_vat_and_sd, vat_price=vat)
+        pass
+        # return JsonResponse(json.dumps(request.POST, default=str), safe=False)

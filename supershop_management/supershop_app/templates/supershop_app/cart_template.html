@@ -107,7 +107,7 @@
                                     </li>
                                 </ul>
 
-                                <button type="button" class="btn btn-primary btn-block">go to checkout</button>
+                                <button type="button" class="btn btn-primary btn-block" onclick="getAmountsForFinalizeOrder();">Place Order</button>
 
                             </div>
 
@@ -213,8 +213,10 @@
                 orderId
             },
             function(data){
-                data = JSON.parse(data);
                 console.log(data);
+                if (data != null){
+                    window.location.href = '/order_success';
+                }
             });
 
         }

@@ -13,6 +13,8 @@ from fpdf import FPDF
 import qrcode
 import json
 import os
+from django.conf import settings
+from django.http import FileResponse, Http404
 
 
 # class HomePage(LoginRequiredMixin, View):
@@ -294,7 +296,7 @@ def admin_product_operation(request, ops):
 
 
 # Order and main site
-
+@login_required(login_url='/login/')
 def products(request):
     if request.method == 'GET':
         all_products = models.Product.objects.filter(current_stock__gt=0)
@@ -344,6 +346,7 @@ def update_cart(request):
                             safe=False)
 
 
+@login_required(login_url='/login/')
 def cart_view(request):
     cart_product = models.Order.objects.filter(purchase_by=request.user, order_placed=False).first()
     total_orders = models.Order.objects.filter(purchase_by=request.user, order_placed=False).first()
@@ -382,17 +385,17 @@ def remove_item_from_cart(request):
         return JsonResponse(0, safe=False)
 
 
-def generate_pdf(name, img_data, qr_path, invoice_path, file_name, data):
+def generate_pdf(name, img_data, qr_path, invoice_path, file_name, order):
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=28)
     epw = pdf.w - 2 * pdf.l_margin
-    col_width = epw / 4
+    col_width = epw / 6
     th = pdf.font_size
     pdf.ln(4 * th)
-    pdf.set_font('Arial', 'B', 14.0)
+    pdf.set_font('Arial', 'B', 18.0)
 
-    pdf.cell(200, 10, txt="Invoice" + str(name),
+    pdf.cell(200, 10, txt=f"Invoice of {name}",
              ln=1, align='C')
     img_data = json.dumps(img_data)
     qr = qrcode.QRCode(
@@ -410,21 +413,33 @@ def generate_pdf(name, img_data, qr_path, invoice_path, file_name, data):
     img_path = os.path.join(qr_path, img_name)
     img.save(img_path)
     pdf.image(img_path)
-    sl = 0
-    for row in data:
-        if sl == 0:
-            for d in ['SL No.', 'Item', 'Unit Price', 'QTY', 'Total']:
-                pdf.cell(col_width, 2 * th, str(d), border=1)
-        else:
-            pdf.cell(col_width, 2 * th, str(sl), border=1)
-            # for datum in row:
-            pdf.cell(col_width, 2 * th, str(row.added_products.product_name), border=1)
-            pdf.cell(col_width, 2 * th, str(row.added_products.product_unit_price), border=1)
-            pdf.cell(col_width, 2 * th, str(row.product_count), border=1)
-            pdf.cell(col_width, 2 * th, str((row.product_count * row.added_products.product_unit_price)), border=1)
+
+    for d in ['SL No.', 'Item', 'Unit Price', 'QTY', 'Total']:
+        pdf.cell(col_width, 1 * th, str(d), border=1)
+    pdf.ln(th)
+    sl = 1
+
+    purchased = order.purchased_products.all()
+    for row in purchased:
+        pdf.cell(col_width, 1 * th, str(sl), border=1)
+        # for datum in row:
+        pdf.cell(col_width, 1 * th, str(row.added_products.product_name), border=1)
+        pdf.cell(col_width, 1 * th, str(row.added_products.product_unit_price), border=1)
+        pdf.cell(col_width, 1 * th, str(row.product_count), border=1)
+        pdf.cell(col_width, 1 * th, str((row.product_count * row.added_products.product_unit_price)), border=1)
 
         sl += 1
-        pdf.ln(2 * th)
+        pdf.ln(th)
+    pdf.cell(col_width * 4, 1 * th, "Total", border=1)
+    pdf.cell(col_width, 1 * th, str(order.total_amount), border=1)
+    pdf.ln(th)
+    pdf.cell(col_width * 4, 1 * th, "VAT + SD", border=1)
+    pdf.cell(col_width, 1 * th, str(order.vat_price), border=1)
+    pdf.ln(th)
+
+    pdf.cell(col_width * 4, 1 * th, "Total Payable", border=1)
+    pdf.cell(col_width, 1 * th, str(order.total_amount + order.vat_price), border=1)
+    pdf.ln(th)
 
     if not os.path.exists(invoice_path):
         os.mkdir(invoice_path)
@@ -443,6 +458,10 @@ def finalize_order_and_make_invoice(request):
         order_id = int(request.POST['orderId'])
 
         order = models.Order.objects.filter(pk=order_id).first()
+        order.vat_price = vat
+        order.total_amount = amt_without_vat_and_sd
+        order.save()
+
         name = request.user.username
         img_data = f'Username: {request.user.full_name} \n' \
                    f'Full Name: {request.user.username} \n' \
@@ -455,10 +474,29 @@ def finalize_order_and_make_invoice(request):
             qr_path='qr_images',
             invoice_path='invoices',
             file_name=str(order.order_id),
-            data=order.purchased_products.all()
+            order=order
         )
-        prev_order = models.Order.objects.filter(
+        _ = models.Order.objects.filter(
             purchase_by=request.user, order_placed=False, pk=order_id
-        ).update(total_amount=amt_without_vat_and_sd, vat_price=vat, order_placed=True)
-        pass
-        # return JsonResponse(json.dumps(request.POST, default=str), safe=False)
+        ).update(total_amount=amt_without_vat_and_sd, vat_price=vat,
+                 order_placed=True, invoice_path=invoice)
+
+        return JsonResponse(json.dumps(1, default=str), safe=False)
+
+
+@login_required(login_url='/login/')
+def order_success(request):
+    order = models.Order.objects.filter(purchase_by=request.user, order_placed=True).last()
+    context = {"is_logged_in": request.user.is_authenticated,
+               "title": "Success",
+               "invoice_path": order.invoice_path
+               }
+    return render(request, 'order_success.html', context=context)
+
+
+def invoice_view(request, invoice_id):
+    f = open(os.path.join(settings.BASE_DIR, 'invoices', invoice_id), 'rb')
+    try:
+        return FileResponse(f, content_type='application/pdf')
+    except FileNotFoundError:
+        raise Http404()

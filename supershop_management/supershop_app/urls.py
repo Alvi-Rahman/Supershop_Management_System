@@ -12,6 +12,8 @@ urlpatterns = [
     path('finalize_order_and_make_invoice/', views.finalize_order_and_make_invoice,
          name="finalize_order_and_make_invoice"),
     path('update_cart/', views.update_cart, name="update_cart"),
+    path('order_success/', views.order_success, name="order_success"),
+    path('invoices/<str:invoice_id>/', views.invoice_view, name="invoice_view"),
     path('signup/', views.signup, name="signup"),
     path('login/', views.login_view, name="login"),
     path('logout/', views.logout_view, name="logout"),

@@ -397,11 +397,10 @@ def generate_pdf(name, img_data, qr_path, invoice_path, file_name, order):
 
     pdf.cell(200, 10, txt=f"Invoice of {name}",
              ln=1, align='C')
-    img_data = json.dumps(img_data)
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
-        box_size=8,
+        box_size=5,
         border=2,
     )
     qr.add_data(img_data)
@@ -463,10 +462,10 @@ def finalize_order_and_make_invoice(request):
         order.save()
 
         name = request.user.username
-        img_data = f'Username: {request.user.username} \n ' \
-                   f'Full Name: {request.user.full_name} \n ' \
-                   f' Email: {request.user.email} \n ' \
-                   f' Phone no. : {request.user.phone} \n ' \
+        img_data = f'Username: {request.user.username}\n' \
+                   f'Full Name: {request.user.full_name}\n' \
+                   f'Email: {request.user.email}\n' \
+                   f'Phone no. : {request.user.phone}\n' \
                    f'Invoice: {str(order.order_id)}'
         invoice = generate_pdf(
             name=name,

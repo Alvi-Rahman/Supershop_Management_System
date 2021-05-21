@@ -365,4 +365,14 @@ def cart_view(request):
 
 
 def remove_item_from_cart(request):
-    pass
+    if request.method == 'POST':
+        rmv_id = request.POST['rmv_id']
+        prev_order = models.Order.objects.filter(purchase_by=request.user, order_placed=False).first()
+        if prev_order is not None:
+            try:
+                _ = prev_order.purchased_products.filter(added_products__pk=rmv_id).delete()
+                return JsonResponse(1, safe=False)
+            except:
+                return JsonResponse(0, safe=False)
+    else:
+        return JsonResponse(0, safe=False)

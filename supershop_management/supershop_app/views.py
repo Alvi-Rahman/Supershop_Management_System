@@ -9,6 +9,8 @@ from django.db.models import F, Sum, Count
 from django.db.utils import IntegrityError
 from . import models
 from django.http import JsonResponse
+from fpdf import FPDF
+import qrcode
 import json
 
 

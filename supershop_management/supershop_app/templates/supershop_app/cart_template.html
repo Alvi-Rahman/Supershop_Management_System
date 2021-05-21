@@ -186,14 +186,18 @@
         }
 
         function removeItem(pk) {
-            {#console.log(pk);#}
             url = "{% url 'remove_item_from_cart' %}";
             $.post(url,
             {
                 rmv_id: pk
             },
             function(data){
-                console.log(data);
+                data = parseInt(data);
+                if (data == 1){
+                    location.reload();
+                }else {
+                    alert("This Product Can not be Removed");
+                }
             });
         }
 

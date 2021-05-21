@@ -55,6 +55,7 @@ class Order(models.Model):
     order_placed = models.BooleanField(default=False)
     vat_price = models.FloatField(default=0)  # Can create a seperate model for it
     total_amount = models.FloatField(default=0)  # For Cross Matching and Ease
+    invoice_path = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return str(self.order_id)

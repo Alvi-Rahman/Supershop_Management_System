@@ -10,10 +10,11 @@ class UserRegistrationForm(UserCreationForm):
     email = forms.EmailField(max_length=255, help_text='Required. Inform a valid email address.',
                              widget=forms.EmailInput(attrs={'class': 'form-control'}))
     phone = forms.CharField(max_length=15, required=False, widget=forms.EmailInput(attrs={'class': 'form-control'}))
+    full_name = forms.CharField(max_length=15, required=False, widget=forms.EmailInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'phone')
+        fields = ('username', 'email', 'phone', 'full_name')
     #
     # def __init__(self, *args, **kwargs):
     #     super(UserRegistrationForm, self).__init__(*args, **kwargs)

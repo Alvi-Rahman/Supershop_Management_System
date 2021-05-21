@@ -28,7 +28,7 @@
                         <div class="mb-3">
                             <div class="pt-4 wish-list">
 
-                                <h4 class="mb-4">Cart (<span>{{ total_orders }}</span> items)</h4>
+                                <h4 class="mb-4">Cart (<span id="cart-id-lg">{{ total_orders }}</span> items)</h4>
 
                                 {#  TODO ForLoop  #}
                                 {% for cart_product in cart_products %}
@@ -38,18 +38,18 @@
                                                 <div class="d-flex justify-content-between">
                                                     <div>
                                                         <h5>{{ cart_product.added_products.product_name }}</h5>
-                                                        <p class="mb-3 text-muted text-uppercase small">Category - {{ cart_product.added_products.product_category.category_name }} </p>
-                                                        <p class="mb-2 text-muted text-uppercase small">Unit Price: {{ cart_product.added_products.product_unit_price }}</p>
+                                                        <p class="mb-3 text-muted text-uppercase small">Category - <span> {{ cart_product.added_products.product_category.category_name }} </span></p>
+                                                        <p class="mb-2 text-muted text-uppercase small">Unit Price: <span id="unit-price-id__{{ cart_product.added_products.pk }}"> {{ cart_product.added_products.product_unit_price }} </span> </p>
 {#                                                        <p class="mb-3 text-muted text-uppercase small">Size: M</p>#}
                                                     </div>
                                                     <div>
                                                         <div class="def-number-input number-input safari_only mb-0 w-100">
-                                                            <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
+                                                            <button onclick="this.parentNode.querySelector('input[type=number]').stepDown(); updateInput({{ cart_product.added_products.pk }}, -1);"
                                                             class="decrease"><i class="fas fa-minus"></i></button>
                                                             <label>
-                                                                <input class="quantity form-control" min="0" name="quantity" value="{{ cart_product.product_count }}" type="number">
+                                                                <input class="quantity form-control" id="quantity__{{ cart_product.added_products.pk }}" min="0" name="quantity" value="{{ cart_product.product_count }}" type="number">
                                                             </label>
-                                                            <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
+                                                            <button onclick="this.parentNode.querySelector('input[type=number]').stepUp(); updateInput({{ cart_product.added_products.pk }}, 1);"
                                                             class="increase"><i class="fas fa-plus"></i></button>
                                                         </div>
 
@@ -61,7 +61,7 @@
                                                             class="fas fa-trash-alt mr-1"></i> Remove item </a>
 
                                                     </div>
-                                                    <p class="mb-0"><span> BDT <strong id="summary"> {{ cart_product.added_products.product_unit_price|calculate_total_price:cart_product.product_count }} </strong></span></p>
+                                                    <p class="mb-0"><span> BDT <strong class="summary" id="summary__{{ cart_product.added_products.pk }}"> {{ cart_product.added_products.product_unit_price|calculate_total_price:cart_product.product_count }} </strong></span></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -89,21 +89,21 @@
 
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
-                                        Temporary amount
-                                        <span>$25.98</span>
+                                        Amount (Without VAT & SD)
+                                        <span> BDT <strong id="total-amount-id">0.0</strong></span>
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                                        Shipping
-                                        <span>Gratis</span>
+                                        Vat(15%)
+                                        <span>BDT <strong id="vat-id"></strong></span>
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
                                         <div>
                                             <strong>The total amount of</strong>
                                             <strong>
-                                              <p class="mb-0">(including VAT)</p>
+                                              <p class="mb-0">(including VAT and SD)</p>
                                             </strong>
                                         </div>
-                                        <span><strong>$53.98</strong></span>
+                                        <span>BDT <strong id="total-amt-with-vat">0.0</strong></span>
                                     </li>
                                 </ul>
 
@@ -140,6 +140,53 @@
         </div>
     </div>
 
+
+
+    <script>
+
+        function updateInput(pk, op) {
+            updateTotalCart();
+
+            updateOrderAjaxRequest(pk, op);
+
+            let inputName = "quantity__"+pk;
+            let unitPriceName = "unit-price-id__"+pk;
+            let summaryName = "summary__"+pk;
+            let inputVal = parseInt($('#'+inputName).val())
+            let unitPrice = parseFloat($('#'+unitPriceName).html());
+
+            let total = inputVal * unitPrice
+            $('#'+summaryName).html(total.toFixed(2));
+
+
+            calcTotalAmt();
+
+        }
+
+        function updateTotalCart() {
+            let inputs = $(".quantity");
+            let sumVal = 0
+            for(let i = 0; i < inputs.length; i++){
+                sumVal += parseInt($(inputs[i]).val());
+            }
+            $('#cart-id-lg').html(sumVal);
+        }
+
+        function calcTotalAmt() {
+            let inputs = $(".summary");
+            let sumVal = 0
+            for(let i = 0; i < inputs.length; i++){
+                sumVal += parseFloat($(inputs[i]).html());
+            }
+
+            $('#total-amount-id').html(sumVal.toFixed(2));
+            $('#vat-id').html((sumVal*0.15).toFixed(2));
+            $('#total-amt-with-vat').html((sumVal*0.15 + sumVal).toFixed(2));
+
+        }
+
+        calcTotalAmt();
+    </script>
 
 
 {% endblock %}

@@ -5,7 +5,7 @@ from .forms import (UserRegistrationForm, UserLoginForm,
                     ProductEditForm)
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.db.models import F, Sum
+from django.db.models import F, Sum, Count
 from django.db.utils import IntegrityError
 from . import models
 from django.http import JsonResponse
@@ -347,6 +347,7 @@ def cart_view(request):
     if total_orders is None:
         total_orders = 0
     total_orders = total_orders.purchased_products.aggregate(Sum('product_count'))['product_count__sum']
+
     context = {
                 "cart_products": cart_product.purchased_products.filter(product_count__gt=0),
                 "total_orders": total_orders,

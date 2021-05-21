@@ -23,12 +23,12 @@
                                 <h6> {{ product.product_category}} </h6>
                                 <h5> {{ product.product_unit_price}} BDT </h5>
 
-                                <a href="javascript:;" onclick="updateCart(1, {{ product.pk }})">
+                                <a href="javascript:" onclick="updateCart(1, {{ product.pk }})">
                                     <span style="font-size: 20px; color: #006b1b">
                                         <i class="fas fa-plus-circle"></i>
                                     </span>
                                 </a>
-                                <a href="javascript:;" onclick="updateCart(-1, {{ product.pk }})">
+                                <a href="javascript:" onclick="updateCart(-1, {{ product.pk }})">
                                     <span style="font-size: 20px; color: #ba2121;">
                                         <i class="fas fa-minus-circle"></i>
                                     </span>
@@ -41,6 +41,77 @@
             </div>
         </div>
     </div>
+
+
+    <script>
+
+        function updateCart(op, prod_id) {
+            let response = null;
+            let txt = "";
+            let qty = "";
+            if(checkCart()){
+                qty = getQty();
+                qty += parseInt(op);
+                if (qty === 0){
+                    $("#cart-id").removeClass("active");
+                    txt = "Cart";
+                    response = updateOrderAjaxRequest(prod_id, op);
+                }
+                else {
+                    $("#cart-id").addClass("active");
+                    txt = "Cart("+qty+")";
+                    response = updateOrderAjaxRequest(prod_id, op);
+                }
+            }else {
+                if (op === -1){
+                    txt = "Cart";
+                    {#response = updateOrderAjaxRequest(prod_id, op);#}
+                }else {
+                    $("#cart-id").addClass("active");
+                    txt = "Cart("+1+")";
+                    response = updateOrderAjaxRequest(prod_id, op);
+                }
+            }
+            if (response === 1){
+                console.log(response)
+                $("#cart-id").html(txt);
+            }
+        }
+        function getQty() {
+            return parseInt($("#cart-id").text().split("(")[1].replace(")",""));
+        }
+        function checkCart() {
+            cart_state = $("#cart-id").text();
+            if (cart_state.includes("(") && cart_state.includes(")")){
+                {#console.log("Not empty");#}
+                return true
+            }else {
+                {#console.log("Empty")#}
+                return false
+            }
+        }
+
+        function getQtyFromDB() {
+            let response = 0
+            url = "{% url 'update_cart' %}";
+            $.get(url,
+            function(data){
+                response = data;
+            });
+            return response;
+        }
+
+        function updateCartOnLoad(){
+            qty = getQtyFromDB()
+            if(qty > 0){
+                $("#cart-id").addClass("active");
+                txt = "Cart("+qty+")";
+                $("#cart-id").html(txt);
+            }
+        };
+        $.ajaxSetup({async:false});
+        updateCartOnLoad();
+    </script>
 
 
 {% endblock %}

@@ -362,3 +362,7 @@ def cart_view(request):
               }
 
     return render(request, "cart_template.html", context=context)
+
+
+def remove_item_from_cart(request):
+    pass

@@ -81,19 +81,13 @@
             return parseInt($("#cart-id").text().split("(")[1].replace(")",""));
         }
         function checkCart() {
-            cart_state = $("#cart-id").text();
-            if (cart_state.includes("(") && cart_state.includes(")")){
-                {#console.log("Not empty");#}
-                return true
-            }else {
-                {#console.log("Empty")#}
-                return false
-            }
+            let cart_state = $("#cart-id").text();
+            return !!(cart_state.includes("(") && cart_state.includes(")"));
         }
 
         function getQtyFromDB() {
             let response = 0
-            url = "{% url 'update_cart' %}";
+            let url = "{% url 'update_cart' %}";
             $.get(url,
             function(data){
                 response = data;
@@ -102,13 +96,14 @@
         }
 
         function updateCartOnLoad(){
-            qty = getQtyFromDB()
+            let qty = getQtyFromDB()
             if(qty > 0){
-                $("#cart-id").addClass("active");
-                txt = "Cart("+qty+")";
-                $("#cart-id").html(txt);
+                let cartId = $("#cart-id");
+                cartId.addClass("active");
+                let txt = "Cart("+qty+")";
+                cartId.html(txt);
             }
-        };
+        }
         $.ajaxSetup({async:false});
         updateCartOnLoad();
     </script>

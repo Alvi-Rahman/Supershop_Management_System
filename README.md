@@ -98,4 +98,27 @@ The home page has only one panel that is `Select Products`
 
 Clicking the `Select products` Panel will redirect you to the available products.
 
+### Products
+
+From this `Products` page you can Add/ Remove any quantity of products that are available(In Stock) and add them
+to cart. After adding/Selecting the products you can click the `cart` link to view the products that have been added to 
+the cart. You can't add a product more than it's quantity in the stock.
+
+### Cart
+
+The Cart Page shows the `details` of your shopping i.e. the quantity of different products purchased, Unit and total 
+pricing od each individual item. Total summed price of all the products that have been bought without VAT and SD. Finally,
+total payable price. if the cart is `empty`, you can not place order as the button is `disabled` in that case. You can also `change` 
+the quantity if different items from the shopping cart along with `removing` different items. After successfully choosing items
+you can click `Place Order` button to place the order.
+
+## Order Success
+
+After successfully placing the order you will be shown a success message and a link to the actual invoice as per the requirements. The link 
+`View Invoice` will show you the `formatted` invoice using `QR Code` and a `table` of the order summary
+
+
+
+
+
 

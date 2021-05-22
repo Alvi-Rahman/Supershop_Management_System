@@ -62,7 +62,7 @@ The other Two links `Product` and `Category` has the most important feature in t
 
     - From `Add a Category` panel you can add each category of products under which different 
       products might be available.
-    - Similarly from `View Category` panel you can view all the categories that have been added
+    - Similarly, from `View Category` panel you can view all the categories that have been added
       so far by the admin.
         - From this page(`View Category`) you can `Edit` and/or `Delete` the relevant information of 
           each of the category that you have adde d so far as an admin.

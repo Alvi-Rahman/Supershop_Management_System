@@ -47,4 +47,26 @@ The admin can be created using the command `python manage.py createsuperuser` an
 
 In this simple site the role of the admin is to add different `categories` and the `products` for End Users.
 
+* At first, Admin can log in to the admin panel from `(http://127.0.0.1:8000/supershop_admin)` url.
+* Then providing the username and password he can Login to the Custom Admin Panel for adding different products and categories.
+* The admin `Home` is basically a blank page at this stage while we need to bring focus to the `Navbar`
+* The Navbar Has 3 Links (`Home` `Category` `Product`) and a logout button.
+* Undoubtedly, the logout button Logs the User out of the panel.
+* Similarly, The `Home` link redirects the user to the Home page of Admin Panel.
+
+The other Two links `Product` and `Category` has the most important feature in this case. 
+
+-   ### Category
+
+    The Category Page has two tabs that are `Add a Category` and `View Category`.
+
+    - From `Add a Category` panel you can add each category of products under which different 
+      products might be available.
+    - Similarly from `View Category` panel you can view all the categories that have been added
+      so far by the admin.
+        - From this page(`View Category`) you can `Edit` and/or `Delete` the relevant information of 
+          each of the category that you have adde d so far as an admin.
+
+
+
 

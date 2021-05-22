@@ -6,7 +6,7 @@ use.
 
 ## Dependencies
 
-* It is recommended that you have python 3.9 installed locally in 
+* It is recommended that you have python 3.9.x installed locally in 
   your machine for running this Project.
 * Similarly, it is recommended that you have pip version > 20.0 installed for this project
   to run.
@@ -20,7 +20,11 @@ you do not face any difficulties while activating the virtual environment.
 * Here you will find `supershop_app` and `supershop_management` sub-directories
   along with `db.sqlite3` `manage.py` and `requirements.txt` files.
 * Create a Virtual Environment in this directory using `virtualenv <env-name>` command
-  in the command line(Windows) and terminal(Mac) where `env-name` refers to your 
+  in the command line(Windows) and terminal(Mac/Linux) where `env-name` refers to your 
   preferred environment name.
+* Create and activate your virtual environment using `source <env-name>/bin/activate` (Mac/Linux terminal) `<env-name>\Scripts\activate` (Windows cmd)
+* Now use `pip install -r requirements.txt` command in terminal/cmd to install all packages/libraries and dependencies.
+
+
 
 

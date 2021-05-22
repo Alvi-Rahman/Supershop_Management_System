@@ -20,6 +20,7 @@ you do not face any difficulties while activating the virtual environment.
 * Here you will find `supershop_app` and `supershop_management` sub-directories
   along with `db.sqlite3` `manage.py` and `requirements.txt` files.
 * Create a Virtual Environment in this directory using `virtualenv <env-name>` command
-  where `env-name` refers to your prefered environment name.
+  in the command line(Windows) and terminal(Mac) where `env-name` refers to your 
+  preferred environment name.
 
 

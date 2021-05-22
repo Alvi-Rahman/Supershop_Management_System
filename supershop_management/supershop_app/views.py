@@ -324,14 +324,14 @@ def update_cart(request):
         if prod is None:
             return JsonResponse(2, safe=False)
         if prev_order is not None:
-            if prev_order.purchased_products.filter(
-                    added_products__pk=prod.pk).first().product_count >= prod.current_stock:
-                return JsonResponse(2, safe=False)
+            chk = prev_order.purchased_products.filter(added_products__pk=prod.pk).first()
+            if op == 1 and chk:
+                if chk.product_count >= prod.current_stock:
+                    return JsonResponse(2, safe=False)
             try:
                 cart = prev_order.purchased_products.filter(
                     added_products__pk=prod.pk).update(product_count=F('product_count') + op)
             except IntegrityError:
-                print("Integrity")
                 return JsonResponse(0, safe=False)
             if cart == 0:
                 cart = models.Cart.objects.create(added_products=prod)
@@ -360,7 +360,7 @@ def cart_view(request):
         total_orders = 0
     else:
         total_orders = total_orders.purchased_products.aggregate(Sum('product_count'))['product_count__sum']
-    cart_count = cart_product.purchased_products.filter(product_count__gt=0) if cart_product is not None else None
+    cart_count = cart_product.purchased_products.filter(product_count__gt=0) if cart_product is not None else 0
     context = {
         "cart_products": cart_count,
         "order_id": cart_product.pk if cart_product is not None else None,

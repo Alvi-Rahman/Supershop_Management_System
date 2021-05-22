@@ -47,7 +47,7 @@
                                                             <button onclick="this.parentNode.querySelector('input[type=number]').stepDown(); updateInput({{ cart_product.added_products.pk }}, -1);"
                                                             class="decrease"><i class="fas fa-minus"></i></button>
                                                             <label>
-                                                                <input class="quantity form-control" id="quantity__{{ cart_product.added_products.pk }}" min="0" name="quantity" value="{{ cart_product.product_count }}" type="number">
+                                                                <input class="quantity form-control" id="quantity__{{ cart_product.added_products.pk }}" min="0" max="{{ cart_product.added_products.current_stock }}" name="quantity" value="{{ cart_product.product_count }}" type="number">
                                                             </label>
                                                             <button onclick="this.parentNode.querySelector('input[type=number]').stepUp(); updateInput({{ cart_product.added_products.pk }}, 1);"
                                                             class="increase"><i class="fas fa-plus"></i></button>
@@ -151,12 +151,11 @@
             updateTotalCart();
 
             let response = updateOrderAjaxRequest(pk, op);
-            console.log(response);
             if( response === 2){
                 alert("Product Out of Stock!");
                 return;
             }else if (response === 0) {
-                alert("Invalid Product Input!");
+                alert("This Item is already 0!");
                 return;
             }
             let inputName = "quantity__"+pk;
@@ -227,7 +226,6 @@
                 orderId
             },
             function(data){
-                console.log(data);
                 if (data === 1){
                     window.location.href = '/order_success';
                 }

@@ -33,4 +33,18 @@ you do not face any difficulties while activating the virtual environment.
 * Copying the `http://127.0.0.1:8000/` url in the browser will start the website in real time.
 
 
+## Users
+
+There are mainly two kind of users
+
+* ### Admin
+* ### End User
+
+
+## Admin
+
+The admin can be created using the command `python manage.py createsuperuser` and then providing the necessary credentials.
+
+In this simple site the role of the admin is to add different `categories` and the `products` for End Users.
+
 

@@ -110,7 +110,8 @@ The Cart Page shows the `details` of your shopping i.e. the quantity of differen
 pricing od each individual item. Total summed price of all the products that have been bought without VAT and SD. Finally,
 total payable price. if the cart is `empty`, you can not place order as the button is `disabled` in that case. You can also `change` 
 the quantity if different items from the shopping cart along with `removing` different items. After successfully choosing items
-you can click `Place Order` button to place the order.
+you can click `Place Order` button to place the order. Here a two-step validation of product stock added os that user can't add a product 
+more than it's quantity.
 
 ## Order Success
 

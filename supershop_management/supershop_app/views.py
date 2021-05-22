@@ -352,11 +352,12 @@ def cart_view(request):
     total_orders = models.Order.objects.filter(purchase_by=request.user, order_placed=False).first()
     if total_orders is None:
         total_orders = 0
-    total_orders = total_orders.purchased_products.aggregate(Sum('product_count'))['product_count__sum']
-
+    else:
+        total_orders = total_orders.purchased_products.aggregate(Sum('product_count'))['product_count__sum']
+    cart_count = cart_product.purchased_products.filter(product_count__gt=0) if cart_product is not None else None
     context = {
-        "cart_products": cart_product.purchased_products.filter(product_count__gt=0),
-        "order_id": cart_product.pk,
+        "cart_products": cart_count,
+        "order_id": cart_product.pk if cart_product is not None else None,
         "total_orders": total_orders,
         "is_logged_in": request.user.is_authenticated,
         "title": "Cart",

@@ -106,8 +106,11 @@
                                         <span>BDT <strong id="total-amt-with-vat">0.0</strong></span>
                                     </li>
                                 </ul>
-
-                                <button type="button" class="btn btn-primary btn-block" onclick="getAmountsForFinalizeOrder();">Place Order</button>
+                                {% if order_id %}
+                                    <button type="button" class="btn btn-primary btn-block" onclick="getAmountsForFinalizeOrder();">Place Order</button>
+                                {% else %}
+                                    <button type="button" class="btn btn-primary btn-block" disabled>Place Order</button>
+                                {% endif %}
 
                             </div>
 
@@ -182,6 +185,10 @@
             $('#total-amount-id').html(sumVal.toFixed(2));
             $('#vat-id').html((sumVal*0.15).toFixed(2));
             $('#total-amt-with-vat').html((sumVal*0.15 + sumVal).toFixed(2));
+
+            if (sumVal == 0){
+                $('.btn-block').prop("disabled",true);
+            }
 
         }
 

@@ -81,5 +81,21 @@ The other Two links `Product` and `Category` has the most important feature in t
           each of the product.
 
 
+## End User
+
+The End Users are the regular consumers who are eligible/responsible to buy any products.
+
+As soon as you run the system you are redirected to the end user login site `(http://127.0.0.1:8000/login/)`
+
+Here the Navbar has 3 links when you are not logged in. If as an end user you have no account you can sign up from
+the `Signup` tab. But you are not allowed to access the home page unless you are logged in. 
+
+    An admin can be a regular/end user while all the regular/end user might not be admins.
+
+Sooner, you log into the system you are redirected to the home page. 
+The home page has only one panel that is `Select Products` 
+(I had plans to build other pages such as filter by categories and so on).
+
+Clicking the `Select products` Panel will redirect you to the available products.
 
 

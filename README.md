@@ -64,8 +64,21 @@ The other Two links `Product` and `Category` has the most important feature in t
       products might be available.
     - Similarly, from `View Category` panel you can view all the categories that have been added
       so far by the admin.
-        - From this page(`View Category`) you can `Edit` and/or `Delete` the relevant information of 
-          each of the category that you have add d so far as an admin.
+        - From this page(`View Category`) an admin can `Edit` and/or `Delete` the relevant information of 
+          each of the category.
+
+
+
+-   ### Product
+
+    On the other hand, Product Page has two tabs as well naming `Add a Product` and `View Products`.
+
+    - From `Add a Product` you can add different products same as the Category panel but with some 
+      more information regarding each product. Nevertheless, each of the products must belong to a 
+      category that have been added so far by the admin.
+    - Similarly, from `View Products` panel and admin can view all the products that the admin have added.
+        - From this page(`View Products`) an admin can `Edit` and/or `Delete` the relevant information of 
+          each of the product.
 
 
 

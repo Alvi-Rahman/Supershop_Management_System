@@ -33,7 +33,7 @@ class Product(models.Model):
     product_name = models.CharField(max_length=255, blank=False, null=False, unique=True)
     product_category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
     product_unit_price = models.FloatField(default=0.0)
-    current_stock = models.IntegerField(default=0)
+    current_stock = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.product_name

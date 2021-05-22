@@ -221,8 +221,11 @@
             },
             function(data){
                 console.log(data);
-                if (data != null){
+                if (data === 1){
                     window.location.href = '/order_success';
+                }
+                else {
+                    alert("Invalid Product Quantity");
                 }
             });
 

@@ -1,1 +1,3 @@
-# Initialize README
+# SuperShop Management User Manual
+
+

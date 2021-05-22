@@ -150,8 +150,15 @@
         function updateInput(pk, op) {
             updateTotalCart();
 
-            updateOrderAjaxRequest(pk, op);
-
+            let response = updateOrderAjaxRequest(pk, op);
+            console.log(response);
+            if( response === 2){
+                alert("Product Out of Stock!");
+                return;
+            }else if (response === 0) {
+                alert("Invalid Product Input!");
+                return;
+            }
             let inputName = "quantity__"+pk;
             let unitPriceName = "unit-price-id__"+pk;
             let summaryName = "summary__"+pk;

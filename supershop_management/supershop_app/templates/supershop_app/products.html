@@ -73,8 +73,11 @@
                 }
             }
             if (response === 1){
-                {#console.log(response)#}
                 $("#cart-id").html(txt);
+            }else if( response === 2){
+                alert("Product Out of Stock!");
+            }else {
+                alert("Invalid Product Input!");
             }
         }
         function getQty() {

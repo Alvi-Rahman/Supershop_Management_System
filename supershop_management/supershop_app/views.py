@@ -460,6 +460,12 @@ def finalize_order_and_make_invoice(request):
         order = models.Order.objects.filter(pk=order_id).first()
         order.vat_price = vat
         order.total_amount = amt_without_vat_and_sd
+        carts = order.purchased_products.all()
+        for cart in carts:
+            print(cart.added_products.pk)
+            models.Product.objects.filter(pk=cart.added_products.pk).update(
+                                            current_stock=F('current_stock') - cart.product_count)
+
         order.save()
 
         name = request.user.username

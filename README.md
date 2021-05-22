@@ -26,5 +26,11 @@ you do not face any difficulties while activating the virtual environment.
 * Now use `pip install -r requirements.txt` command in terminal/cmd to install all packages/libraries and dependencies.
 
 
+## Running The System
+
+* Now run `python manage.py runserver` in cmd/terminal to start the server from root directory (where the manage.py is).
+* Running the command will show `Starting development server at http://127.0.0.1:8000/`
+* Copying the `http://127.0.0.1:8000/` url in the browser will start the website in real time.
+
 
 

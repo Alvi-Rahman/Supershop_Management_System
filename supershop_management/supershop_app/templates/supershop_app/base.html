@@ -137,7 +137,7 @@
         <script>
             function updateOrderAjaxRequest(prod_id, op){
             let response = 0
-            url = "{% url 'update_cart' %}";
+            let url = "{% url 'update_cart' %}";
             $.post(url,
             {
                 prod_id: prod_id,
